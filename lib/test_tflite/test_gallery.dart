@@ -4,15 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
-class TfliteModel2 extends StatefulWidget {
-  const TfliteModel2({Key? key}) : super(key: key);
+class TfliteModel extends StatefulWidget {
+  const TfliteModel({Key? key}) : super(key: key);
   @override
-  _TfliteModel2State createState() => _TfliteModel2State();
+  _TfliteModelState createState() => _TfliteModelState();
 }
 
-  var label = 0;
-
-class _TfliteModel2State extends State<TfliteModel2> {
+class _TfliteModelState extends State<TfliteModel> {
   
   late File _image;
   late List _results;
@@ -25,19 +23,18 @@ class _TfliteModel2State extends State<TfliteModel2> {
     loadModel();
   }
 
-  Future loadModel()
-  async {
+  Future loadModel() async {
     Tflite.close();
     String res;
       res = (await Tflite.loadModel(
         model: "assets/test/model_unquant.tflite",
-        labels: "assets/test/labels.txt")
+        labels: "assets/test/labels.txt",
+        )
       )!;
     print("Models loading status: $res");
   }
 
-  Future imageClassification(File image)
-  async {
+  Future imageClassification(File image) async {
     final List? recognitions = await Tflite.runModelOnImage(
       path: image.path,
       numResults: 10,
@@ -52,40 +49,45 @@ class _TfliteModel2State extends State<TfliteModel2> {
     });
   }
 
+  Future detaList() async {
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Image Classification"),),
-      
+      appBar: AppBar( title: const Text("รูปภาพ"),),
       body: ListView(
-        children: [
-          (imageSelect)?Container(
-        margin: const EdgeInsets.all(10),
-        child: Image.file(_image),
-      ):Container(
-        margin: const EdgeInsets.all(10),
+        children: [ (imageSelect)
+        ?Container(
+          margin: const EdgeInsets.all(10),
+          child: Image.file(_image),
+        )
+
+        :Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
+          margin: const EdgeInsets.all(10),
             child: const Opacity(
               opacity: 0.8,
               child: Center(
-                child: Text("No image selected"),
+                child: Text("กรุณาเลือกรูปภาพ"),
               ),
             ),
-      ),
-          SingleChildScrollView(
+        ),
+          
+          SingleChildScrollView( /// แสดงชื่อ ////
             child: Column(
               children: (imageSelect)?_results.map((result) {
                 return Card(
                   child: Container(
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     child: Text(
-                      "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
+                      "${result['label']}",
                       style: const TextStyle(color: Colors.red,
-                      fontSize: 20),
+                      fontSize: 15),
                     ),
                   ),
                 );
               }).toList():[],
-
             ),
           )
         ],
@@ -98,11 +100,12 @@ class _TfliteModel2State extends State<TfliteModel2> {
       ),
     );
   }
+
   Future pickImage()
   async {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    File image=File(pickedFile!.path);
+    File image = File(pickedFile!.path);
     imageClassification(image);
   }
 }

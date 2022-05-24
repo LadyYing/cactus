@@ -1,44 +1,40 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
-class TfliteModel extends StatefulWidget {
-  const TfliteModel({Key? key}) : super(key: key);
+class Tflite2 extends StatefulWidget {
+  const Tflite2({ Key? key }) : super(key: key);
 
   @override
-  _TfliteModelState createState() => _TfliteModelState();
+  State<Tflite2> createState() => _Tflite2State();
 }
 
-  var label = 0;
+class _Tflite2State extends State<Tflite2> {
+    File?  _image;
+    late List _results;
+    bool imageSelect = false;
 
-class _TfliteModelState extends State<TfliteModel> {
-  
-  late File _image;
-  late List _results;
-  bool imageSelect = false;
+    @override
+    void initState()
+    {
+      super.initState();
+      loadModel();
+    }
 
-  @override
-  void initState()
-  {
-    super.initState();
-    loadModel();
-  }
+    Future loadModel() async {
+      Tflite.close();
+      String res;
+        res = (await Tflite.loadModel(
+          model: "assets/test/model_unquant.tflite",
+          labels: "assets/test/labels.txt",
+          )
+        )!;
+      print("Models loading status: $res");
+    }
 
-  Future loadModel() async {
-    Tflite.close();
-    String res;
-      res = (await Tflite.loadModel(
-        model: "assets/test/model_unquant.tflite",
-        labels: "assets/test/labels.txt",
-        )
-      )!;
-    print("Models loading status: $res");
-  }
-
-  Future imageClassification(File image)
-  async {
+    Future imageClassification(File image) async {
     final List? recognitions = await Tflite.runModelOnImage(
       path: image.path,
       numResults: 10,
@@ -53,16 +49,21 @@ class _TfliteModelState extends State<TfliteModel> {
     });
   }
 
+   Future pickImageC() async { /// กล้อง ////
+      final ImagePicker _picker = ImagePicker();
+      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.camera);
+      final imageTemp = File(pickedFile!.path);
+      imageClassification(_image!);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( title: const Text("Image Classification"),),
-      
       body: ListView(
         children: [ (imageSelect)
         ?Container(
           margin: const EdgeInsets.all(10),
-          child: Image.file(_image),
+          child: Image.file(_image!),
         )
 
         :Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
@@ -70,10 +71,11 @@ class _TfliteModelState extends State<TfliteModel> {
             child: const Opacity(
               opacity: 0.8,
               child: Center(
-                child: Text("No image selected"),
+                child: Text("กรุณาเลือกรูปภาพ"),
               ),
             ),
         ),
+          
           SingleChildScrollView( /// แสดงชื่อ ////
             child: Column(
               children: (imageSelect)?_results.map((result) {
@@ -81,7 +83,7 @@ class _TfliteModelState extends State<TfliteModel> {
                   child: Container(
                     margin: const EdgeInsets.all(10),
                     child: Text(
-                      "${result['label']} - ${result['confidence'].toStringAsFixed(1)}",
+                      "${result['label']}",
                       style: const TextStyle(color: Colors.red,
                       fontSize: 15),
                     ),
@@ -92,23 +94,11 @@ class _TfliteModelState extends State<TfliteModel> {
           )
         ],
       ),
-
       floatingActionButton: FloatingActionButton(  //// ปุ่มเลือกรูป //////
-        onPressed: pickImage,
+        onPressed: pickImageC,
         tooltip: "Pick Image",
-        child: const Icon(Icons.image),
+        child: const Icon(Icons.camera),
       ),
     );
   }
-
-  Future pickImage()
-  async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    File image=File(pickedFile!.path);
-    imageClassification(image);
-  }
-}
-
-class $ {
 }
