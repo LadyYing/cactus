@@ -83,7 +83,7 @@ class _TfliteModelState extends State<TfliteModel> {
                     child: Text(
                       "${result['label']} - ${result['confidence'].toStringAsFixed(1)}",
                       style: const TextStyle(color: Colors.red,
-                      fontSize: 20),
+                      fontSize: 15),
                     ),
                   ),
                 );
