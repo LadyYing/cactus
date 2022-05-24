@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "287149379102",
+    "project_id": "cuctus2022",
+    "storage_bucket": "cuctus2022.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287149379102:android:1c2d395ab328653aaba80f",
+        "android_client_info": {
+          "package_name": "com.rmutt.cactus_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "287149379102-i5lbev8dv2ho5bk2mff1n2m2aq4k8566.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSfByJc6DgsIkVCOSUxjK41jaRmaTci7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "287149379102-i5lbev8dv2ho5bk2mff1n2m2aq4k8566.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,10 @@
+0 GymnocalyciumBaldianum
+1 GymnocalyciumBruchii
+2 GymnocalyciumDamsii
+3 GymnocalyciumMihanovichii
+4 GymnocalyciumRagonesei
+5 MammillariaBocasana
+6 MammillariaCarmenae
+7 MammillariaHumboldtii
+8 MammillariaPerbella
+9 MammillariaPlumose
