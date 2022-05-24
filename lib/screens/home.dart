@@ -156,7 +156,7 @@ class _MenuHomeState extends State<MenuHome> {
                               Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>  HomeCamera(cameras),
+                                  builder: (context) =>  Tflite2(),
                                 ),
                               );
                             },
@@ -224,7 +224,7 @@ class _MenuHomeState extends State<MenuHome> {
                               Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>Tflite2(),
+                                  builder: (context) =>TfliteModel(),
                                 ),
                               );
                             },

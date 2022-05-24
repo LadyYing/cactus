@@ -1,6 +1,6 @@
 import 'dart:io';
+import 'package:cactus_project/screens/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
@@ -49,7 +49,7 @@ class _Tflite2State extends State<Tflite2> {
     });
   }
 
-   Future pickImageC() async { /// กล้อง ////
+   Future pickImageC() async { /// กล้อง ///////
       final ImagePicker _picker = ImagePicker();
       final XFile? pickedFile = await _picker.pickImage(source: ImageSource.camera);
       final imageTemp = File(pickedFile!.path);
@@ -59,19 +59,33 @@ class _Tflite2State extends State<Tflite2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /*appBar: AppBar( 
+        centerTitle: true,
+        title: const Text("กล้อง"),
+        backgroundColor: Colors.cyan[900],
+        leading: IconButton( //// กลับไปหน้าแรก ///
+          icon: const Icon(Icons.home),
+          onPressed: () {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => MenuHome()),);
+          },
+        ),
+      ),*/
+      
       body: ListView(
         children: [ (imageSelect)
-        ?Container(
+        ? Container(
           margin: const EdgeInsets.all(10),
           child: Image.file(_image!),
         )
 
-        :Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
+        : Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
           margin: const EdgeInsets.all(10),
             child: const Opacity(
               opacity: 0.8,
               child: Center(
-                child: Text("กรุณาเลือกรูปภาพ"),
+                child: Text("กรุณาถ่ายรูปภาพ", textAlign: TextAlign.center,),
               ),
             ),
         ),
@@ -94,11 +108,14 @@ class _Tflite2State extends State<Tflite2> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(  //// ปุ่มเลือกรูป //////
+      floatingActionButton: FloatingActionButton(  //// ถ่ายรูป //////
         onPressed: pickImageC,
         tooltip: "Pick Image",
+        splashColor: Colors.teal,
+        hoverElevation: 50,
         child: const Icon(Icons.camera),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

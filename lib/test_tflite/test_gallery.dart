@@ -1,4 +1,14 @@
 import 'dart:io';
+import 'package:cactus_project/plants/gym_baldianum.dart';
+import 'package:cactus_project/plants/gym_bruchii.dart';
+import 'package:cactus_project/plants/gym_damsii.dart';
+import 'package:cactus_project/plants/gym_mihanovichii.dart';
+import 'package:cactus_project/plants/gym_ragonesei.dart';
+import 'package:cactus_project/plants/mam_bocasana.dart';
+import 'package:cactus_project/plants/mam_carmenae.dart';
+import 'package:cactus_project/plants/mam_humboldtii.dart';
+import 'package:cactus_project/plants/mam_perbella.dart';
+import 'package:cactus_project/plants/mam_plumose.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -50,7 +60,29 @@ class _TfliteModelState extends State<TfliteModel> {
   }
 
   Future detaList() async {
-    
+    Tflite.close();
+    dynamic result;
+    if(result == 0) {
+      return MamPerbella();
+    } else if (result == 1) {
+        return MamCarmenae();
+    } else if (result == 2) {
+        return MamPlumose();
+    } else if (result == 3) {
+        return MamHumboldtii();
+    } else if (result == 4) {
+        return MamBocasana();
+    } else if (result == 5) {
+        return GymBaldianum();
+    } else if (result == 6) {
+        return GymDamsii();
+    } else if (result == 7) {
+        return GymBruchii();
+    } else if (result == 8) {
+        return GymMihanovichii();
+    } else if (result == 9) {
+        return GymRagonesei();
+    }
   }
 
   @override
@@ -63,7 +95,7 @@ class _TfliteModelState extends State<TfliteModel> {
           margin: const EdgeInsets.all(10),
           child: Image.file(_image),
         )
-
+        
         :Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
           margin: const EdgeInsets.all(10),
             child: const Opacity(
@@ -72,8 +104,7 @@ class _TfliteModelState extends State<TfliteModel> {
                 child: Text("กรุณาเลือกรูปภาพ"),
               ),
             ),
-        ),
-          
+        ), 
           SingleChildScrollView( /// แสดงชื่อ ////
             child: Column(
               children: (imageSelect)?_results.map((result) {
@@ -92,12 +123,12 @@ class _TfliteModelState extends State<TfliteModel> {
           )
         ],
       ),
-
       floatingActionButton: FloatingActionButton(  //// ปุ่มเลือกรูป //////
         onPressed: pickImage,
         tooltip: "Pick Image",
         child: const Icon(Icons.image),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // ย้ายไอคอน ///
     );
   }
 
