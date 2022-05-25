@@ -21,7 +21,6 @@ class TfliteModel extends StatefulWidget {
 }
 
 class _TfliteModelState extends State<TfliteModel> {
-  
   late File _image;
   late List _results;
   bool imageSelect = false;
@@ -58,6 +57,7 @@ class _TfliteModelState extends State<TfliteModel> {
       imageSelect = true;
     });
   }
+
 
   Future detaList() async {
     Tflite.close();
