@@ -72,7 +72,6 @@ class _Tflite2State extends State<Tflite2> {
           },
         ),
       ),*/
-      
       body: ListView(
         children: [ (imageSelect)
         ? Container(
@@ -108,10 +107,13 @@ class _Tflite2State extends State<Tflite2> {
           )
         ],
       ),
+      /*bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Container(height: 60.0),
+      ),*/
       floatingActionButton: FloatingActionButton(  //// ถ่ายรูป //////
         onPressed: pickImageC,
-        tooltip: "Pick Image",
-        splashColor: Colors.teal,
+        tooltip: "Pick Image Camera",
         hoverElevation: 50,
         child: const Icon(Icons.camera),
       ),

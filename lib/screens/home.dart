@@ -12,7 +12,7 @@ import 'package:cactus_project/plants/mam_carmenae.dart';
 import 'package:cactus_project/plants/mam_humboldtii.dart';
 import 'package:cactus_project/plants/mam_perbella.dart';
 import 'package:cactus_project/plants/mam_plumose.dart';
-import 'package:cactus_project/plants/my_plants.dart';
+import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/plants/mam_bocasana.dart';
 import 'package:cactus_project/screens/tips.dart';
 import 'package:cactus_project/test_tflite/test_camera.dart';
@@ -156,7 +156,7 @@ class _MenuHomeState extends State<MenuHome> {
                               Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>  Tflite2(),
+                                  builder: (context) =>  MamPlumose(),
                                 ),
                               );
                             },

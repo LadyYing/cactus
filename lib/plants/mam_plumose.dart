@@ -1,4 +1,4 @@
-import 'package:cactus_project/plants/my_plants.dart';
+import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,23 +24,8 @@ class _nameState extends State<MamPlumose> {
       appBar: AppBar(
         title: const Text("ผลลัพธ์"),
         backgroundColor: Colors.cyan[900],
-        leading: IconButton(  ///// Blck page ////
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {},
-        ),
-        actions: <Widget>[    ///// ปุ่มเพิ่มสวนของฉัน  ////
-          IconButton( 
-            icon: const Icon(Icons.add),
-            onPressed:() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyPlants()),
-              ); print('Add to My Plant');
-            },
-          ),
-
-        ],
       ),
+
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("MamPlumose").snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
@@ -243,6 +228,25 @@ class _nameState extends State<MamPlumose> {
             }).toList(),
           );
         },
+      ),
+
+      floatingActionButton: Container( ///// ปุ่มเพิ่มสวนของฉัน  /////////
+        height: 65.0, width: 65.0,
+        child: FittedBox(
+          child: FloatingActionButton(
+            backgroundColor: const Color(0xFFE57373),
+            onPressed: (){
+
+            },
+            child: const Icon(Icons.add, color: Colors.white,),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        color: Colors.cyan[900],
+        child: Container(height: 60),
       ),
     );
   }
