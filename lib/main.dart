@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/' : (context) => MenuHome(),
-        '/two' : (context) => Tflite2(),
+        '/two' : (context) => MamPlumose(),
         '/three' : (context) => Tisp(),
         '/four' : (context) =>  TfliteModel(),
       }
