@@ -13,6 +13,7 @@ import 'package:cactus_project/plants/mam_perbella.dart';
 import 'package:cactus_project/plants/mam_plumose.dart';
 import 'package:cactus_project/plants/mam_bocasana.dart';
 import 'package:cactus_project/screens/gallery.dart';
+import 'package:cactus_project/test_tflite/test3.dart';
 import 'package:cactus_project/test_tflite/test_camera.dart';
 import 'package:cactus_project/test_tflite/test_gallery.dart';
 import 'package:camera/camera.dart';
@@ -51,8 +52,8 @@ class MyApp extends StatelessWidget {
       //// กำหนดเส้นทางหน้าอื่นโดยไม่ต้องแก้ไข /////
       initialRoute: '/',
       routes: {
-        '/' : (context) => MenuHome(),
-        '/two' : (context) => Tflite2(),
+        '/' : (context) => MyPlants(),
+        '/two' : (context) => MamPerbella(),
         '/three' : (context) => Tisp(),
         '/four' : (context) =>  TfliteModel(),
       }

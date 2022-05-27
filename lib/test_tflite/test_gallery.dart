@@ -21,6 +21,7 @@ class TfliteModel extends StatefulWidget {
 }
 
 class _TfliteModelState extends State<TfliteModel> {
+  
   late File _image;
   late List _results;
   bool imageSelect = false;
@@ -58,8 +59,7 @@ class _TfliteModelState extends State<TfliteModel> {
     });
   }
 
-
-  Future detaList() async {
+  /*Future detaList() async {
     Tflite.close();
     dynamic result;
     if(result == 0) {
@@ -83,7 +83,7 @@ class _TfliteModelState extends State<TfliteModel> {
     } else if (result == 9) {
         return GymRagonesei();
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +93,12 @@ class _TfliteModelState extends State<TfliteModel> {
         backgroundColor: Colors.cyan[900],
       ),
       body: ListView(
+        
         children: [ (imageSelect)
         ? Container(
             margin: const EdgeInsets.all(10),
             child: Image.file(_image),
         )
-        
         :Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
           margin: const EdgeInsets.all(10),
             child: const Opacity(
@@ -107,23 +107,52 @@ class _TfliteModelState extends State<TfliteModel> {
                 child: Text("กรุณาเลือกรูปภาพ"),
               ),
             ),
-        ), 
+        ),  
           SingleChildScrollView( /// แสดงชื่อ ////
             child: Column(
               children: (imageSelect)?_results.map((result) {
                 return Card(
                   child: Container(
                     margin: const EdgeInsets.all(10),
-                    child: Text(
-                      "${result['label']}",
-                      style: const TextStyle(color: Colors.red,
-                      fontSize: 15),
+                    child: Column(
+                      children: [
+                        Text (
+                          "${result['label']}",
+                          style: const TextStyle (
+                            color: Colors.red,
+                            fontSize: 15
+                          ),
+                        ),
+                        const SizedBox(height: 20,),
+                        TextButton(
+                          onPressed: () {
+                            Tflite.close();
+                            //dynamic result;
+                            print("${result['label']}");
+                            
+                            if ("${result['label']}" == '0 Perbella') {
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamPerbella()),
+                              );
+                            } else if ("${result['label']}" == '1 Carmenae'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamCarmenae()),
+                              );
+                            }
+                          }, 
+                          child: Text('รายละเอียด'),
+                        ),
+                      ],
                     ),
+                    
                   ),
                 );
               }).toList():[],
             ),
-          )
+          ), 
+          //add()
         ],
       ),
       floatingActionButton: FloatingActionButton (  //// ปุ่มเลือกรูป //////
@@ -142,4 +171,26 @@ class _TfliteModelState extends State<TfliteModel> {
     File image = File(pickedFile!.path);
     imageClassification(image);
   }
+
+  TextButton add() => TextButton(
+    onPressed: () {
+      Tflite.close();
+      dynamic result;
+      print(result);
+
+      if (result == '0 Perbella') {
+        Navigator.push(
+        context,
+          MaterialPageRoute(builder: (context) => MamPerbella()),
+        );
+      } else if (result == '1 Carmenae'){
+         Navigator.push(
+        context,
+          MaterialPageRoute(builder: (context) => MamCarmenae()),
+        );
+      }
+    }, 
+    child: Text('รายละเอียด'),
+  );
+
 }

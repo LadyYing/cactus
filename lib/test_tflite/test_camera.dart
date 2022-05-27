@@ -106,10 +106,6 @@ class _Tflite2State extends State<Tflite2> {
           )
         ],
       ),
-      /*bottomNavigationBar: BottomAppBar (
-        shape: const CircularNotchedRectangle(),
-        child: Container(height: 60.0),
-      ),*/
       floatingActionButton: FloatingActionButton(  //// ถ่ายรูป //////
         onPressed: pickImageC,
         tooltip: "Pick Image Camera",
