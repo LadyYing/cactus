@@ -27,19 +27,8 @@ class _GymBaldianumState extends State<GymBaldianum> {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {},
         ),
-        actions: <Widget>[    ///// ปุ่มเพิ่มสวนของฉัน  ////
-          IconButton( 
-            icon: const Icon(Icons.add),
-            onPressed:() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyPlants()),
-              ); print('Add to My Plant');
-            },
-          ),
-        ],
       ),
-        body: StreamBuilder(
+      body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection("GymBaldianum").snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
             if (!snapshot.hasData){  ///// ถ้าไม่มีข้อมูลให้แสดงหมุนๆ //////
@@ -242,6 +231,24 @@ class _GymBaldianumState extends State<GymBaldianum> {
             );
           },
         ),
+      floatingActionButton: Container( ///// ปุ่มเพิ่มสวนของฉัน  /////////
+        height: 65.0, width: 65.0,
+        child: FittedBox(
+          child: FloatingActionButton(
+            backgroundColor: const Color(0xFFE57373),
+            onPressed: (){
+              
+            },
+            child: const Icon(Icons.add, color: Colors.white,),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        color: Colors.cyan[900],
+        child: Container(height: 60),
+      ),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:cactus_project/add_myplants/cart.dart';
+import 'package:cactus_project/add_myplants/cart_model.dart';
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,6 +12,15 @@ class MamPlumose extends StatefulWidget {
 
 class _nameState extends State<MamPlumose> {
 
+  List<CartModle> cartItems = [
+    CartModle(
+      image: 'https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FMPlumose%2F271743546_292957702888785_8396561920546073419_n.jpg?alt=media&token=4c3ee293-2397-4f27-9706-917face338b0', 
+      botname: 'Mammillaria plumosa F.A.C.Weber', 
+      comname: 'Feather Cactus', 
+      oname: 'แมมขนนก'
+    )
+  ];
+
   final imageList = [ //// รูปภาพ 10 /////
     "image", "image1", "image2", "image3","image4", 
     "image5","image6", "image7", "image8", "image9",
@@ -20,6 +31,7 @@ class _nameState extends State<MamPlumose> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("ผลลัพธ์"),
@@ -229,14 +241,14 @@ class _nameState extends State<MamPlumose> {
           );
         },
       ),
-
+      
       floatingActionButton: Container( ///// ปุ่มเพิ่มสวนของฉัน  /////////
         height: 65.0, width: 65.0,
         child: FittedBox(
           child: FloatingActionButton(
             backgroundColor: const Color(0xFFE57373),
             onPressed: (){
-
+              
             },
             child: const Icon(Icons.add, color: Colors.white,),
           ),
@@ -248,6 +260,7 @@ class _nameState extends State<MamPlumose> {
         color: Colors.cyan[900],
         child: Container(height: 60),
       ),
+      
     );
   }
 }
