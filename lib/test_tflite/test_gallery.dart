@@ -88,12 +88,15 @@ class _TfliteModelState extends State<TfliteModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( title: const Text("รูปภาพ"),),
+      appBar: AppBar( 
+        title: const Text("ผลลัพธ์"),
+        backgroundColor: Colors.cyan[900],
+      ),
       body: ListView(
         children: [ (imageSelect)
-        ?Container(
-          margin: const EdgeInsets.all(10),
-          child: Image.file(_image),
+        ? Container(
+            margin: const EdgeInsets.all(10),
+            child: Image.file(_image),
         )
         
         :Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
@@ -123,12 +126,12 @@ class _TfliteModelState extends State<TfliteModel> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(  //// ปุ่มเลือกรูป //////
+      floatingActionButton: FloatingActionButton (  //// ปุ่มเลือกรูป //////
         onPressed: pickImage,
         tooltip: "Pick Image",
         child: const Icon(Icons.image),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // ย้ายไอคอน ///
+      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // ย้ายไอคอน ///
     );
   }
 

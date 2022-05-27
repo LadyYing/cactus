@@ -1,4 +1,5 @@
 
+import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/camera_detection/camera.dart';
 import 'package:cactus_project/camera_detection/capture.dart';
 import 'package:cactus_project/plants/gym_baldianum.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:cactus_project/camera_detection/home_camera.dart';
 import 'package:cactus_project/screens/home.dart';
 import 'package:cactus_project/screens/tips.dart';
+
 
 late List<CameraDescription> cameras;
 const String ssd = "SSD MobileNet";
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/' : (context) => MenuHome(),
-        '/two' : (context) => MamPlumose(),
+        '/two' : (context) => Tflite2(),
         '/three' : (context) => Tisp(),
         '/four' : (context) =>  TfliteModel(),
       }

@@ -156,7 +156,7 @@ class _MenuHomeState extends State<MenuHome> {
                               Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>  MamPlumose(),
+                                  builder: (context) =>  Tflite2(),
                                 ),
                               );
                             },

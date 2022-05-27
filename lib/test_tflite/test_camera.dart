@@ -88,7 +88,6 @@ class _Tflite2State extends State<Tflite2> {
               ),
             ),
         ),
-          
           SingleChildScrollView( /// แสดงชื่อ ////
             child: Column(
               children: (imageSelect)?_results.map((result) {
@@ -107,7 +106,7 @@ class _Tflite2State extends State<Tflite2> {
           )
         ],
       ),
-      /*bottomNavigationBar: BottomAppBar(
+      /*bottomNavigationBar: BottomAppBar (
         shape: const CircularNotchedRectangle(),
         child: Container(height: 60.0),
       ),*/
@@ -117,7 +116,7 @@ class _Tflite2State extends State<Tflite2> {
         hoverElevation: 50,
         child: const Icon(Icons.camera),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
