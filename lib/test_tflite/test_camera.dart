@@ -112,7 +112,7 @@ class _Tflite2State extends State<Tflite2> {
         hoverElevation: 50,
         child: const Icon(Icons.camera),
       ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

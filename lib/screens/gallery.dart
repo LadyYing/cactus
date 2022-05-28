@@ -9,6 +9,7 @@ import 'package:cactus_project/plants/mam_carmenae.dart';
 import 'package:cactus_project/plants/mam_humboldtii.dart';
 import 'package:cactus_project/plants/mam_perbella.dart';
 import 'package:cactus_project/plants/mam_plumose.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,7 +47,7 @@ class _GalleryState extends State<Gallery> {
     print("Models loading status: $res");
   }
 
-  Future imageClassification(File image) async {
+  Future imageClassification(File image) async { 
     final List? recognitions = await Tflite.runModelOnImage(
       path: image.path,
       numResults: 10,
@@ -61,31 +62,21 @@ class _GalleryState extends State<Gallery> {
     });
   }
 
-  /*Future detaList() async {
-    Tflite.close();
-    dynamic result;
-    if(result == 0) {
-      return MamPerbella();
-    } else if (result == 1) {
-        return MamCarmenae();
-    } else if (result == 2) {
-        return MamPlumose();
-    } else if (result == 3) {
-        return MamHumboldtii();
-    } else if (result == 4) {
-        return MamBocasana();
-    } else if (result == 5) {
-        return GymBaldianum();
-    } else if (result == 6) {
-        return GymDamsii();
-    } else if (result == 7) {
-        return GymBruchii();
-    } else if (result == 8) {
-        return GymMihanovichii();
-    } else if (result == 9) {
-        return GymRagonesei();
-    }
-  }*/
+////////////////////////// Upload Image ///////////////////////////
+  PickedFile? pickedFile;
+  UploadTask? uploadTask;
+  Future uploadImage() async{
+    final path = 'ImageCollect/${imageSelect}';
+    final file= File(pickedFile!.path);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+      uploadTask = ref.putFile(file);
+    
+    final snapshot = await uploadTask!.whenComplete(() {});
+    final ulrDownload = await snapshot.ref.getDownloadURL();
+      print('Download Link: $ulrDownload');
+  }
+///////////////////////////////////////////////////////////////
 
   @override
   Widget build(BuildContext context) {
@@ -117,12 +108,18 @@ class _GalleryState extends State<Gallery> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                    ClipRRect(
+                    
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20), topRight: Radius.circular(20),
                       bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)
                     ),
-                    child: Image.file (_image, fit:BoxFit.fill, ),
+                    child: Container(
+                      color: Colors.grey[300],
+                      child: Image.file (_image, fit:BoxFit.fill,),
+                    ),
                   ),
+
+                  upload(), ///// Button UpImage /////
                 ],
               ),
             ),
@@ -145,7 +142,6 @@ class _GalleryState extends State<Gallery> {
               children: (imageSelect)?_results.map((result) {
                 return Card(
                   elevation: 8,
-                  //color: Colors.teal[100],
                   shadowColor: Colors.teal,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -162,7 +158,8 @@ class _GalleryState extends State<Gallery> {
                           "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
                           style: const TextStyle (
                             color: Colors.red,
-                            fontSize: 15
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 10,),
@@ -174,6 +171,7 @@ class _GalleryState extends State<Gallery> {
                           onPressed: () {
                             Tflite.close();
                             print("${result['label']}");
+                            print('${result['confidence']}');
 
                             if ("${result['label']}" == '0 Perbella') {
                               Navigator.push(
@@ -231,7 +229,7 @@ class _GalleryState extends State<Gallery> {
                         ),
                       ],
                     ),
-                    
+                   
                   ),
                 );
               }).toList():[],
@@ -263,13 +261,19 @@ class _GalleryState extends State<Gallery> {
     imageClassification(image);
   }
 
-  TextButton add() => TextButton(   //// กดดูรายเอียด ///
+  TextButton add() => TextButton(   //// ดูรายเอียด ///
     onPressed: () {
       Tflite.close();
       dynamic result;
       print(result);
     }, 
     child: Text('รายละเอียด'),
+  );
+
+  ElevatedButton upload() => ElevatedButton(  /// uploadImage ///////
+    
+    onPressed: uploadImage, 
+    child: Text('อัปโหลด'),
   );
 
 }
