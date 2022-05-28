@@ -15,7 +15,6 @@ import 'package:cactus_project/plants/mam_plumose.dart';
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/plants/mam_bocasana.dart';
 import 'package:cactus_project/screens/tips.dart';
-import 'package:cactus_project/test_tflite/test3.dart';
 import 'package:cactus_project/test_tflite/test_camera.dart';
 import 'package:cactus_project/test_tflite/test_gallery.dart';
 import 'package:camera/camera.dart';
@@ -225,7 +224,7 @@ class _MenuHomeState extends State<MenuHome> {
                               Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>TfliteModel(),
+                                  builder: (context) =>Gallery2(),
                                 ),
                               );
                             },

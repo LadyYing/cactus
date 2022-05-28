@@ -1,5 +1,6 @@
 import 'package:cactus_project/add_myplants/cart_model.dart';
 import 'package:cactus_project/add_myplants/my_plants.dart';
+import 'package:cactus_project/screens/gallery.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,14 @@ class _nameState extends State<MamPlumose> {
       appBar: AppBar(
         title: const Text("ผลลัพธ์"),
         backgroundColor: Colors.cyan[900],
+        leading: IconButton(  ///// Blck page ////
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+             Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => Gallery()),);
+          },
+        ),
       ),
 
       body: StreamBuilder(
@@ -58,7 +67,7 @@ class _nameState extends State<MamPlumose> {
                               topLeft: Radius.circular(20),
                               topRight: Radius.circular(20),
                             ),
-                            child: Image.network(document['image0'], width: 250,height: 300,fit:BoxFit.fill,),
+                            child: Image.network(document['image0'], width: 230,height: 300,fit:BoxFit.fill,),
                           ),
                           const ListTile(
                             title: Text('CACTACEAE : MAMMILLARIA'),
@@ -81,8 +90,8 @@ class _nameState extends State<MamPlumose> {
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, indext) => 
                               Container(
-                                height: 100,
-                                width: 150,
+                                height: 200,
+                                width: 130,
                                 margin: const EdgeInsets.all(7),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
@@ -238,9 +247,7 @@ class _nameState extends State<MamPlumose> {
         child: FittedBox(
           child: FloatingActionButton(
             backgroundColor: const Color(0xFFE57373),
-            onPressed: (){
-              
-            },
+            onPressed: (){},
             child: const Icon(Icons.add, color: Colors.white,),
           ),
         ),

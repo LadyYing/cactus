@@ -101,6 +101,7 @@ flutter:
     - assets/model/detect.tflite
     - assets/model/detect.txt
     - assets/test/model_unquant.tflite
+    - assets/test/model2.tflite
     - assets/test/labels.txt
   # DataCactus
     - assets/images/Bocasana7.jpg

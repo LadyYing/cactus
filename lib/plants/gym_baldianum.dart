@@ -1,4 +1,5 @@
 import 'package:cactus_project/add_myplants/my_plants.dart';
+import 'package:cactus_project/screens/gallery.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +26,14 @@ class _GymBaldianumState extends State<GymBaldianum> {
         backgroundColor: Colors.cyan[900],
         leading: IconButton(  ///// Blck page ////
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          onPressed: () {
+             Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => Gallery()),);
+          },
         ),
       ),
+      
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection("GymBaldianum").snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
@@ -57,7 +63,7 @@ class _GymBaldianumState extends State<GymBaldianum> {
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20),
                               ),
-                              child: Image.network(document['image0'], width: 250,height: 300,fit:BoxFit.fill,),
+                              child: Image.network(document['image0'], width: 230, height: 300,fit:BoxFit.fill,),
                             ),
                             const ListTile(
                               title: Text('CACTACEAE : GYMNOCALYCIUM'),
@@ -80,8 +86,8 @@ class _GymBaldianumState extends State<GymBaldianum> {
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, indext) => 
                                 Container(
-                                  height: 100,
-                                  width: 150,
+                                  height: 200,
+                                  width: 130,
                                   margin: const EdgeInsets.all(7),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
@@ -231,6 +237,7 @@ class _GymBaldianumState extends State<GymBaldianum> {
             );
           },
         ),
+      
       floatingActionButton: Container( ///// ปุ่มเพิ่มสวนของฉัน  /////////
         height: 65.0, width: 65.0,
         child: FittedBox(

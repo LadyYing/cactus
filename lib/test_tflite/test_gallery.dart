@@ -14,13 +14,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
-class TfliteModel extends StatefulWidget {
-  const TfliteModel({Key? key}) : super(key: key);
+class Gallery2 extends StatefulWidget {
+  const Gallery2({Key? key}) : super(key: key);
   @override
-  _TfliteModelState createState() => _TfliteModelState();
+  _Gallery2State createState() => _Gallery2State();
 }
 
-class _TfliteModelState extends State<TfliteModel> {
+class _Gallery2State extends State<Gallery2> {
   
   late File _image;
   late List _results;
@@ -124,12 +124,11 @@ class _TfliteModelState extends State<TfliteModel> {
                           ),
                         ),
                         const SizedBox(height: 20,),
-                        TextButton(
+                        TextButton(  //// ปุ่มแสดง Dec /////
                           onPressed: () {
                             Tflite.close();
-                            //dynamic result;
                             print("${result['label']}");
-                            
+
                             if ("${result['label']}" == '0 Perbella') {
                               Navigator.push(
                               context,
@@ -140,7 +139,47 @@ class _TfliteModelState extends State<TfliteModel> {
                               context,
                                 MaterialPageRoute(builder: (context) => MamCarmenae()),
                               );
-                            }
+                            } else if ("${result['label']}" == '2 Plumose'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamPlumose()),
+                              );
+                            } else if ("${result['label']}" == '3 Humboldtii'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamHumboldtii()),
+                              );
+                            } else if ("${result['label']}" == '4 Bocasana'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamBocasana()),
+                              );
+                            } else if ("${result['label']}" == '5 Baldianum'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymBaldianum()),
+                              );
+                            } else if ("${result['label']}" == '6 Damsii'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymDamsii()),
+                              );
+                            } else if ("${result['label']}" == '7 Bruchii'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymBruchii()),
+                              );
+                            } else if ("${result['label']}" == '8 Mihanovichii'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymMihanovichii()),
+                              );
+                            } else if ("${result['label']}" == '9 Ragonesei'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymRagonesei()),
+                              );
+                            }  
                           }, 
                           child: Text('รายละเอียด'),
                         ),
@@ -160,7 +199,7 @@ class _TfliteModelState extends State<TfliteModel> {
         tooltip: "Pick Image",
         child: const Icon(Icons.image),
       ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // ย้ายไอคอน ///
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // ย้ายไอคอน ///
     );
   }
 

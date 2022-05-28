@@ -1,188 +1,275 @@
-/*import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:ext_storage/ext_storage.dart';
-import 'package:chewie/chewie.dart';
+import 'package:cactus_project/plants/gym_baldianum.dart';
+import 'package:cactus_project/plants/gym_bruchii.dart';
+import 'package:cactus_project/plants/gym_damsii.dart';
+import 'package:cactus_project/plants/gym_mihanovichii.dart';
+import 'package:cactus_project/plants/gym_ragonesei.dart';
+import 'package:cactus_project/plants/mam_bocasana.dart';
+import 'package:cactus_project/plants/mam_carmenae.dart';
+import 'package:cactus_project/plants/mam_humboldtii.dart';
+import 'package:cactus_project/plants/mam_perbella.dart';
+import 'package:cactus_project/plants/mam_plumose.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:video_player/video_player.dart';
-import 'package:path/path.dart' as path;
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:tflite/tflite.dart';
+
+import 'home.dart';
 
 class Gallery extends StatefulWidget {
-  const Gallery({ required  Key key, 
-    this.title = 'Chewie Demo',
-  }) : super(key: key);
-
-    final String title;
-
+  const Gallery({Key? key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() {
-    return _GalleryState();
-  }
+  _GalleryState createState() => _GalleryState();
 }
 
 class _GalleryState extends State<Gallery> {
-  late TargetPlatform _platform;
-  late VideoPlayerController _videoPlayerController1;
-  late ChewieController _chewieController;
-
-  static final Directory _photoDir =
-    new Directory('/storage/emulated/0/Android/data/com.rmutt.cpe.project.helmet_detection_app/files/Video');
-
-  get deleteFile => null;
+  
+  late File _image;
+  late List _results;
+  bool imageSelect = false;
 
   @override
-  void initState() {
+  void initState()
+  {
     super.initState();
+    loadModel();
   }
 
-  @override
-  void dispose() {
-    _videoPlayerController1.dispose();
-    _chewieController.dispose();
-    super.dispose();
-  } 
+  Future loadModel() async {
+    Tflite.close();
+    String res;
+      res = (await Tflite.loadModel(
+        model: "assets/test/model2.tflite",
+        labels: "assets/test/labels.txt",
+        )
+      )!;
+    print("Models loading status: $res");
+  }
+
+  Future imageClassification(File image) async {
+    final List? recognitions = await Tflite.runModelOnImage(
+      path: image.path,
+      numResults: 10,
+      threshold: 0.05,
+      imageMean: 127.5,
+      imageStd: 127.5,
+    );
+    setState(() {
+      _results = recognitions!;
+      _image = image;
+      imageSelect = true;
+    });
+  }
+
+  /*Future detaList() async {
+    Tflite.close();
+    dynamic result;
+    if(result == 0) {
+      return MamPerbella();
+    } else if (result == 1) {
+        return MamCarmenae();
+    } else if (result == 2) {
+        return MamPlumose();
+    } else if (result == 3) {
+        return MamHumboldtii();
+    } else if (result == 4) {
+        return MamBocasana();
+    } else if (result == 5) {
+        return GymBaldianum();
+    } else if (result == 6) {
+        return GymDamsii();
+    } else if (result == 7) {
+        return GymBruchii();
+    } else if (result == 8) {
+        return GymMihanovichii();
+    } else if (result == 9) {
+        return GymRagonesei();
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    List<FileSystemEntity> _photoList;
-    Directory _downloadsDirectory;
-
-    Widget? buildPhoto(int index) {
-      Future<Widget?> initializePlayer(index) async {
-        _videoPlayerController1 = VideoPlayerController.file(_photoList![index]);
-        try {
-          await Future.wait([
-            _videoPlayerController1.initialize()
-          ]);
-          _chewieController = ChewieController (
-            videoPlayerController: _videoPlayerController1,
-            autoPlay: false,
-            looping: false,
-          );
-        }
-        catch(e){return null;}
-        return Center();
-      }
-      deleeFile(index) async {
-        try{
-          await _photoList[index].delete();
-          Navigator.pop(context, 'ตกลง');
-        } catch(e) {
-            return 0;
-          }
-          setState(() {
-          
-          });
-      }
-
-      download(index) async {
-
-        try{
-          Directory appDocDir = await getTemporaryDirectory();
-          String appDocPath = appDocDir.path;
-          print(appDocPath);
-          String pathDownload = await ExtStorage.getExternalStoragePublicDirectory(
-            ExtStorage.DIRECTORY_PICTURES
-          );
-
-          var basNameWithExtension = path.basename(_photoList[index].path);
-          Navigator.pop(context, 'ตกลง');
-          setState(() {
-          
-          });
-        } catch (e) {
-            return 0;
-        }
-      }
-      if (index >= _photoList.length) {
-        return null;
-      } print('Loading video[$index]: ${'_photoList[index]'}... done');
-      return GestureDetector(
-        child: Center(
-          child: Card(
-            child: Column(
-              children: <Widget>[
-                FutureBuilder<Widget>(
-                  future: initializePlayer(index),
-                  builder: (context, snapshot) => (_chewieController != null && _chewieController.videoPlayerController.value.isInitialized
-                    ? Chewie(controller: _chewieController,)
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const[
-                          CircularProgressIndicator(),
-                          SizedBox(),
-                          Text('รอสักครู่'),
-                        ],
-                      )
-                    ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () => showDialog(
-                        context: context,
-                        builder: (BuildContext cuntext) => AlertDialog(
-                          title: const Text('คุณต้องการดาวน์โหลดใช่หรือไม่ ?'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'ยกเลิก'),
-                              child: const Text('ยกเลิก',style: TextStyle(color: Colors.red),),
-                            ),
-                            TextButton(
-                              onPressed: () =>  download(index),
-                              child: const Text('ตกลง',style: TextStyle(color: Colors.red),),
-                            ),
-                          ],
-                        )
-                      ),
-                      icon: const Icon(Icons.download)
-                    ),
-                    const SizedBox(),
-                    IconButton(
-                      onPressed: () => showDialog<String> (
-                        context: context,
-                        builder:  (BuildContext context) => AlertDialog (
-                          title: const Text('คุณต้องการลบไฟล์ใช่หรือไม่ ?'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel',style: TextStyle(color: Colors.red),),
-                            ),
-                            TextButton(
-                              onPressed: () => deleteFile[index],
-                              child: const Text('ตกลง',style: TextStyle(color: Colors.red),),
-                            ),
-                          ],
-                        ),  
-                      ),
-                      icon: Icon(Icons.restore_from_trash,color: Colors.red,),
-                    ),
-                  ]
-                ),
-              ]
-            ),
-          ),
-        ),
-      );
-    }
-
-    Widget? buildPhotoList() {
-      _photoList = _photoDir.listSync();
-      return new ListView.builder(
-        itemBuilder: (BuildContext context, int index) => buildPhoto(index)
-      );
-    }
-
     return Scaffold(
-      appBar: AppBar(),
-      body:  Center(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: buildPhotoList(),
+      appBar: AppBar( 
+        title: const Text("ผลลัพธ์"),
+        backgroundColor: Colors.cyan[900],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => MenuHome()),);
+          },
         ),
       ),
+      
+      body: ListView(
+        children: [ (imageSelect)
+        ? Container (     /// แสดงรูปภาพ   ///////////
+            margin: const EdgeInsets.all(10),
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                   ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20), topRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)
+                    ),
+                    child: Image.file (_image, fit:BoxFit.fill, ),
+                  ),
+                ],
+              ),
+            ),
+        )
+
+        : Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
+          margin: const EdgeInsets.all(10),
+            child: const Center(
+              child: Opacity(
+                opacity: 0.8,
+                child: Center(
+                  child: Text("กรุณาเลือกรูปภาพ"),
+                ),
+              ),
+            ),
+        ),  
+          
+          SingleChildScrollView(  /// แสดงชื่อ ////
+            child: Column(
+              children: (imageSelect)?_results.map((result) {
+                return Card(
+                  elevation: 8,
+                  //color: Colors.teal[100],
+                  shadowColor: Colors.teal,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20), topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)
+                    )
+                  ),
+                  child: Container(
+                    width: 340,
+                    margin: const EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Text (
+                          "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
+                          style: const TextStyle (
+                            color: Colors.red,
+                            fontSize: 15
+                          ),
+                        ),
+                        const SizedBox(height: 10,),
+                        
+                        TextButton(  //// ปุ่มแสดง Dec /////
+                          style: TextButton.styleFrom(
+                            primary: Colors.cyan[700],
+                          ),
+                          onPressed: () {
+                            Tflite.close();
+                            print("${result['label']}");
+
+                            if ("${result['label']}" == '0 Perbella') {
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamPerbella()),
+                              );
+                            } else if ("${result['label']}" == '1 Carmenae') {
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamCarmenae()),
+                              );
+                            } else if ("${result['label']}" == '2 Plumose'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamPlumose()),
+                              );
+                            } else if ("${result['label']}" == '3 Humboldtii'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamHumboldtii()),
+                              );
+                            } else if ("${result['label']}" == '4 Bocasana'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => MamBocasana()),
+                              );
+                            } else if ("${result['label']}" == '5 Baldianum'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymBaldianum()),
+                              );
+                            } else if ("${result['label']}" == '6 Damsii'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymDamsii()),
+                              );
+                            } else if ("${result['label']}" == '7 Bruchii'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymBruchii()),
+                              );
+                            } else if ("${result['label']}" == '8 Mihanovichii'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymMihanovichii()),
+                              );
+                            } else if ("${result['label']}" == '9 Ragonesei'){
+                              Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => GymRagonesei()),
+                              );
+                            }  
+                          }, 
+                          child: const Text('รายละเอียด', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                        ),
+                      ],
+                    ),
+                    
+                  ),
+                );
+              }).toList():[],
+            ),
+          ), 
+        ],
+      ),
+
+      floatingActionButton: Container (  //// ปุ่มเลือกรูป //////
+        height: 65.0, width: 65.0,
+        child: FittedBox(
+          child: FloatingActionButton(
+            backgroundColor: const Color(0xFFE57373),
+            onPressed: pickImage,
+            tooltip: "Pick Image",
+            child: const Icon(Icons.image, color: Colors.white,),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // ย้ายไอคอน ///
     );
   }
-}*/
+
+  Future pickImage()
+  async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    File image = File(pickedFile!.path);
+    imageClassification(image);
+  }
+
+  TextButton add() => TextButton(   //// กดดูรายเอียด ///
+    onPressed: () {
+      Tflite.close();
+      dynamic result;
+      print(result);
+    }, 
+    child: Text('รายละเอียด'),
+  );
+
+}
