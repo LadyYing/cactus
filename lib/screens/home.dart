@@ -37,7 +37,7 @@ class _MenuHomeState extends State<MenuHome> {
       body: Stack(
         children: <Widget>[
           Container(  ////// พื้นเขียววว /////
-            height: size.height * .50,
+            height: size.height * .55,
             color: Colors.teal[700],
           ),
           SafeArea(
@@ -109,7 +109,7 @@ class _MenuHomeState extends State<MenuHome> {
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 2,
-                      childAspectRatio: .80,
+                      childAspectRatio: .85,
                       crossAxisSpacing: 18,
                       mainAxisSpacing: 18,
                       children: <Widget>[
@@ -157,7 +157,7 @@ class _MenuHomeState extends State<MenuHome> {
                               Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>  Tflite2(),
+                                  builder: (context) =>  TestCamera(),
                                 ),
                               );
                             },

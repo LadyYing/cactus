@@ -108,7 +108,6 @@ class _GalleryState extends State<Gallery> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                    ClipRRect(
-                    
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20), topRight: Radius.circular(20),
                       bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)
@@ -118,7 +117,6 @@ class _GalleryState extends State<Gallery> {
                       child: Image.file (_image, fit:BoxFit.fill,),
                     ),
                   ),
-
                   upload(), ///// Button UpImage /////
                 ],
               ),
@@ -140,96 +138,98 @@ class _GalleryState extends State<Gallery> {
           SingleChildScrollView(  /// แสดงชื่อ ////
             child: Column(
               children: (imageSelect)?_results.map((result) {
-                return Card(
-                  elevation: 8,
-                  shadowColor: Colors.teal,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20), topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)
-                    )
-                  ),
-                  child: Container(
-                    width: 340,
-                    margin: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Text (
-                          "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
-                          style: const TextStyle (
-                            color: Colors.red,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 10,),
-                        
-                        TextButton(  //// ปุ่มแสดง Dec /////
-                          style: TextButton.styleFrom(
-                            primary: Colors.cyan[700],
-                          ),
-                          onPressed: () {
-                            Tflite.close();
-                            print("${result['label']}");
-                            print('${result['confidence']}');
-
-                            if ("${result['label']}" == '0 Perbella') {
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => MamPerbella()),
-                              );
-                            } else if ("${result['label']}" == '1 Carmenae') {
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => MamCarmenae()),
-                              );
-                            } else if ("${result['label']}" == '2 Plumose'){
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => MamPlumose()),
-                              );
-                            } else if ("${result['label']}" == '3 Humboldtii'){
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => MamHumboldtii()),
-                              );
-                            } else if ("${result['label']}" == '4 Bocasana'){
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => MamBocasana()),
-                              );
-                            } else if ("${result['label']}" == '5 Baldianum'){
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => GymBaldianum()),
-                              );
-                            } else if ("${result['label']}" == '6 Damsii'){
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => GymDamsii()),
-                              );
-                            } else if ("${result['label']}" == '7 Bruchii'){
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => GymBruchii()),
-                              );
-                            } else if ("${result['label']}" == '8 Mihanovichii'){
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => GymMihanovichii()),
-                              );
-                            } else if ("${result['label']}" == '9 Ragonesei'){
-                              Navigator.push(
-                              context,
-                                MaterialPageRoute(builder: (context) => GymRagonesei()),
-                              );
-                            }  
-                          }, 
-                          child: const Text('รายละเอียด', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
-                        ),
-                      ],
+                return Center(
+                  child: Card(
+                    elevation: 8,
+                    shadowColor: Colors.teal,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20), topRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)
+                      )
                     ),
-                   
+                    child: Container(
+                      width: 340,
+                      margin: const EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text (
+                            "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
+                            style: const TextStyle (
+                              color: Colors.red,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          
+                          TextButton(  //// ปุ่มแสดง Dec /////
+                            style: TextButton.styleFrom(
+                              primary: Colors.cyan[700],
+                            ),
+                            onPressed: () {
+                              Tflite.close();
+                              print("${result['label']} - ${result['confidence']}");
+
+                              if ("${result['label']}" == '0 Perbella') {
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => MamPerbella()),
+                                );
+                              } else if ("${result['label']}" == '1 Carmenae') {
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => MamCarmenae()),
+                                );
+                              
+                              } else if ("${result['label']}" == '2 Plumose'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => MamPlumose()),
+                                );
+                              } else if ("${result['label']}" == '3 Humboldtii'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => MamHumboldtii()),
+                                );
+                              } else if ("${result['label']}" == '4 Bocasana'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => MamBocasana()),
+                                );
+                              } else if ("${result['label']}" == '5 Baldianum'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => GymBaldianum()),
+                                );
+                              } else if ("${result['label']}" == '6 Damsii'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => GymDamsii()),
+                                );
+                              } else if ("${result['label']}" == '7 Bruchii'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => GymBruchii()),
+                                );
+                              } else if ("${result['label']}" == '8 Mihanovichii'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => GymMihanovichii()),
+                                );
+                              } else if ("${result['label']}" == '9 Ragonesei'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => GymRagonesei()),
+                                );
+                              } 
+                            },
+                            child: const Text('รายละเอียด', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                          ),
+                        ],
+                      ),
+                     
+                    ),
                   ),
                 );
               }).toList():[],
@@ -267,13 +267,19 @@ class _GalleryState extends State<Gallery> {
       dynamic result;
       print(result);
     }, 
-    child: Text('รายละเอียด'),
+    child: const Text('รายละเอียด'),
   );
 
-  ElevatedButton upload() => ElevatedButton(  /// uploadImage ///////
-    
+  ElevatedButton upload() => ElevatedButton (  /// uploadImage ///////
+    style: ElevatedButton.styleFrom(
+      primary: Colors.teal,
+      textStyle: const TextStyle(
+        fontSize: 17,
+        //fontWeight: FontWeight.bold
+      ),
+    ),
     onPressed: uploadImage, 
-    child: Text('อัปโหลด'),
+    child: const Text('อัปโหลดรูปภาพ'),
   );
 
 }
