@@ -9,7 +9,7 @@ const String ssd = "Model";
 
 class HomeCamera extends StatefulWidget {
   final List<CameraDescription> cameras;
-  HomeCamera(this.cameras);
+  HomeCamera(this.cameras,);
   
   @override
   State<HomeCamera> createState() => _HomeCameraState();

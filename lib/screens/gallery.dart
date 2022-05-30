@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cactus_project/plants/gym_baldianum.dart';
 import 'package:cactus_project/plants/gym_bruchii.dart';
 import 'package:cactus_project/plants/gym_damsii.dart';
@@ -9,13 +10,16 @@ import 'package:cactus_project/plants/mam_carmenae.dart';
 import 'package:cactus_project/plants/mam_humboldtii.dart';
 import 'package:cactus_project/plants/mam_perbella.dart';
 import 'package:cactus_project/plants/mam_plumose.dart';
+import 'package:cactus_project/test_tflite/filebase_api.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
-
+import 'package:path/path.dart' as path;
 import 'home.dart';
+
 
 class Gallery extends StatefulWidget {
   const Gallery({Key? key}) : super(key: key);
@@ -24,7 +28,7 @@ class Gallery extends StatefulWidget {
 }
 
 class _GalleryState extends State<Gallery> {
-  
+  UploadTask? task;
   late File _image;
   late List _results;
   bool imageSelect = false;
@@ -47,7 +51,8 @@ class _GalleryState extends State<Gallery> {
     print("Models loading status: $res");
   }
 
-  Future imageClassification(File image) async { 
+  File? image;
+  Future imageClassification(image) async { 
     final List? recognitions = await Tflite.runModelOnImage(
       path: image.path,
       numResults: 10,
@@ -63,20 +68,23 @@ class _GalleryState extends State<Gallery> {
   }
 
 ////////////////////////// Upload Image ///////////////////////////
-  PickedFile? pickedFile;
-  UploadTask? uploadTask;
-  Future uploadImage() async{
-    final path = 'ImageCollect/${imageSelect}';
-    final file= File(pickedFile!.path);
+  Future uplpadFile() async {
+    if (_image == null) return;
 
-    final ref = FirebaseStorage.instance.ref().child(path);
-      uploadTask = ref.putFile(file);
-    
-    final snapshot = await uploadTask!.whenComplete(() {});
-    final ulrDownload = await snapshot.ref.getDownloadURL();
-      print('Download Link: $ulrDownload');
+    final fileName = path.basename(_image.path);
+    final destination = 'regis/$fileName';
+
+    task = FirebaseApi.uploadFile(destination, _image);
+    setState(() {});
+
+    if (task == null) return;
+
+    final snapshot = await task!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    print('Download-Link: $urlDownload');
   }
-///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +103,7 @@ class _GalleryState extends State<Gallery> {
       ),
       
       body: ListView(
-        children: [ (imageSelect)
+        children: [ (imageSelect) 
         ? Container (     /// แสดงรูปภาพ   ///////////
             margin: const EdgeInsets.all(10),
             child: Card(
@@ -163,6 +171,18 @@ class _GalleryState extends State<Gallery> {
                           ),
                           const SizedBox(height: 10,),
                           
+                          ElevatedButton(
+                            onPressed: () {
+                              uplpadFile();
+                            },
+                            child: Text('อัปโหลดไฟล์'),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ),
+
                           TextButton(  //// ปุ่มแสดง Dec /////
                             style: TextButton.styleFrom(
                               primary: Colors.cyan[700],
@@ -253,8 +273,7 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
-  Future pickImage()
-  async {
+  Future pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     File image = File(pickedFile!.path);
@@ -270,16 +289,22 @@ class _GalleryState extends State<Gallery> {
     child: const Text('รายละเอียด'),
   );
 
-  ElevatedButton upload() => ElevatedButton (  /// uploadImage ///////
-    style: ElevatedButton.styleFrom(
-      primary: Colors.teal,
-      textStyle: const TextStyle(
-        fontSize: 17,
-        //fontWeight: FontWeight.bold
+  Container upload() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: ElevatedButton(
+        onPressed: () {
+          uplpadFile();
+        },
+        child: Text('อัปโหลดไฟล์'),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
       ),
-    ),
-    onPressed: uploadImage, 
-    child: const Text('อัปโหลดรูปภาพ'),
-  );
+    );
+  }
 
+   
 }

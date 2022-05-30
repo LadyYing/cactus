@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'package:cactus_project/screens/home.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
+
 
 class Tflite2 extends StatefulWidget {
   const Tflite2({ Key? key }) : super(key: key);
@@ -12,6 +13,7 @@ class Tflite2 extends StatefulWidget {
 }
 
 class _Tflite2State extends State<Tflite2> {
+    late CameraController controller;
     File?  _image;
     late List _results;
     bool imageSelect = false;

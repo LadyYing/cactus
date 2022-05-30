@@ -1,19 +1,8 @@
-import 'package:cactus_project/camera_detection/camera.dart';
 import 'package:cactus_project/camera_detection/capture.dart';
 import 'package:cactus_project/camera_detection/home_camera.dart';
 import 'package:cactus_project/comment/comment.dart';
 import 'package:cactus_project/main.dart';
-import 'package:cactus_project/plants/gym_baldianum.dart';
-import 'package:cactus_project/plants/gym_bruchii.dart';
-import 'package:cactus_project/plants/gym_damsii.dart';
-import 'package:cactus_project/plants/gym_mihanovichii.dart';
-import 'package:cactus_project/plants/gym_ragonesei.dart';
-import 'package:cactus_project/plants/mam_carmenae.dart';
-import 'package:cactus_project/plants/mam_humboldtii.dart';
-import 'package:cactus_project/plants/mam_perbella.dart';
-import 'package:cactus_project/plants/mam_plumose.dart';
 import 'package:cactus_project/add_myplants/my_plants.dart';
-import 'package:cactus_project/plants/mam_bocasana.dart';
 import 'package:cactus_project/screens/tips.dart';
 import 'package:cactus_project/test_tflite/test_camera.dart';
 import 'package:cactus_project/test_tflite/test_gallery.dart';
@@ -153,13 +142,14 @@ class _MenuHomeState extends State<MenuHome> {
                               borderSide: const BorderSide(color: Colors.white)
                           ),
                           child: InkWell(
-                            onTap: (){
-                              Navigator.push(
+                            onTap: () async {
+                              await availableCameras().then(
+                              (value) => Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>  TestCamera(),
+                                  builder: (context) =>  Uploadregistrationdocuments(),
                                 ),
-                              );
+                              ),);
                             },
                             child: Container(
                               padding: const EdgeInsets.all(20),

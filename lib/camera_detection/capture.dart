@@ -36,8 +36,8 @@ class _TfilteHomeState extends State<TfilteHome> {
       String res;
       if (_model == ssd) {
         res = (await Tflite.loadModel(
-          labels: "assets/model/detect.txt",
-          model: "assets/model/detect.tflite",
+          labels: "assets/test/labels.txt",
+          model: "assets/test/model2.tflite",
         ))!;
       }  
     } on PlatformException{
