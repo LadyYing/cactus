@@ -6,7 +6,6 @@ import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/screens/tips.dart';
 import 'package:cactus_project/test_tflite/test_camera.dart';
 import 'package:cactus_project/test_tflite/test_gallery.dart';
-import 'package:cactus_project/test_tflite/up_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
