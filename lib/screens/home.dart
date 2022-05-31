@@ -147,7 +147,7 @@ class _MenuHomeState extends State<MenuHome> {
                               (value) => Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>  Uploadregistrationdocuments(),
+                                  builder: (context) =>  Tflite2(),
                                 ),
                               ),);
                             },

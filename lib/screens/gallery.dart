@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:cactus_project/plants/gym_baldianum.dart';
 import 'package:cactus_project/plants/gym_bruchii.dart';
 import 'package:cactus_project/plants/gym_damsii.dart';
@@ -11,7 +10,6 @@ import 'package:cactus_project/plants/mam_humboldtii.dart';
 import 'package:cactus_project/plants/mam_perbella.dart';
 import 'package:cactus_project/plants/mam_plumose.dart';
 import 'package:cactus_project/test_tflite/filebase_api.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +70,7 @@ class _GalleryState extends State<Gallery> {
     if (_image == null) return;
 
     final fileName = path.basename(_image.path);
-    final destination = 'regis/$fileName';
+    final destination = 'imageCollect/$fileName';
 
     task = FirebaseApi.uploadFile(destination, _image);
     setState(() {});
@@ -188,8 +186,7 @@ class _GalleryState extends State<Gallery> {
                               primary: Colors.cyan[700],
                             ),
                             onPressed: () {
-                              Tflite.close();
-                              print("${result['label']} - ${result['confidence']}");
+                              print("${result['label']}");
 
                               if ("${result['label']}" == '0 Perbella') {
                                 Navigator.push(
@@ -288,6 +285,7 @@ class _GalleryState extends State<Gallery> {
     }, 
     child: const Text('รายละเอียด'),
   );
+  
 
   Container upload() {
     return Container(

@@ -16,7 +16,8 @@ class _Tflite2State extends State<Tflite2> {
     late CameraController controller;
     File?  _image;
     late List _results;
-    bool imageSelect = false;
+    //bool imageSelect = false;
+
 
     @override
     void initState()
@@ -47,11 +48,28 @@ class _Tflite2State extends State<Tflite2> {
     setState(() {
       _results = recognitions!;
       _image = image;
-      imageSelect = true;
+      //imageSelect = true;
     });
   }
 
-   Future pickImageC() async { /// กล้อง ///////
+   /////////////////////////////////////////////////////////////
+  Future _getCamera() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image != null) {
+        final imageTmp = File(image.path);
+        setState(() {
+          this._image = imageTmp;
+          imageClassification(imageTmp);
+        });
+      }
+    } catch (e) {
+      print('err image => $e');
+    }
+  }
+   ////////////////////////////////////////////////////////////////////////
+
+  Future pickImageC() async { /// กล้อง ///////
       final ImagePicker _picker = ImagePicker();
       final XFile? pickedFile = await _picker.pickImage(source: ImageSource.camera);
       final imageTemp = File(pickedFile!.path);
@@ -75,24 +93,12 @@ class _Tflite2State extends State<Tflite2> {
         ),
       ),*/
       body: ListView(
-        children: [ (imageSelect)
-        ? Container(
-          margin: const EdgeInsets.all(10),
-          child: Image.file(_image!),
-        )
-
-        : Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
-          margin: const EdgeInsets.all(10),
-            child: const Opacity(
-              opacity: 0.8,
-              child: Center(
-                child: Text("กรุณาถ่ายรูปภาพ", textAlign: TextAlign.center,),
-              ),
-            ),
-        ),
+        children: [ 
+           _image != null ? Image.file(_image!) : Text('กรุณาถ่ายภาพ', textAlign: TextAlign.center,),
+        
           SingleChildScrollView( /// แสดงชื่อ ////
             child: Column(
-              children: (imageSelect)?_results.map((result) {
+              children: _image != null ? _results.map((result) { 
                 return Card(
                   child: Container(
                     margin: const EdgeInsets.all(10),
@@ -109,7 +115,7 @@ class _Tflite2State extends State<Tflite2> {
         ],
       ),
       floatingActionButton: FloatingActionButton(  //// ถ่ายรูป //////
-        onPressed: pickImageC,
+        onPressed: _getCamera,
         tooltip: "Pick Image Camera",
         hoverElevation: 50,
         child: const Icon(Icons.camera),
