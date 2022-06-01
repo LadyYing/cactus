@@ -31,7 +31,7 @@ dependencies:
   firebase_storage: ^9.0.0
 
   image: ^3.1.2
-  image_picker: 0.8.5+3
+  image_picker: ^0.8.5
   tflite: ^1.1.2
   provider: ^6.0.2
   exif: ^2.2.0

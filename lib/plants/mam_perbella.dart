@@ -1,4 +1,5 @@
-import 'package:cactus_project/screens/gallery.dart';
+import 'package:cactus_project/tflite/gallery.dart';
+import 'package:cactus_project/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _MamPerbellaState extends State<MamPerbella> {
           onPressed: () {
              Navigator.push(
               context, 
-              MaterialPageRoute(builder: (context) => Gallery()),);
+              MaterialPageRoute(builder: (context) => MenuHome()),);
           },
         ),
       ),

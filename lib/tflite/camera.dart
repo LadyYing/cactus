@@ -9,48 +9,51 @@ import 'package:cactus_project/plants/mam_carmenae.dart';
 import 'package:cactus_project/plants/mam_humboldtii.dart';
 import 'package:cactus_project/plants/mam_perbella.dart';
 import 'package:cactus_project/plants/mam_plumose.dart';
-import 'package:cactus_project/test_tflite/filebase_api.dart';
+import 'package:cactus_project/screens/home.dart';
+import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
-import 'package:path/path.dart' as path;
-import 'home.dart';
+
+import 'filebase_api.dart';
 
 
-class Gallery extends StatefulWidget {
-  const Gallery({Key? key}) : super(key: key);
+class Tflite2 extends StatefulWidget {
+  const Tflite2({ Key? key }) : super(key: key);
+
   @override
-  _GalleryState createState() => _GalleryState();
+  State<Tflite2> createState() => _Tflite2State();
 }
 
-class _GalleryState extends State<Gallery> {
-  UploadTask? task;
-  late File _image;
-  late List _results;
-  bool imageSelect = false;
+class _Tflite2State extends State<Tflite2> {
+    late CameraController controller;
+    UploadTask? task;
+    File?  _image;
+    List _results = [];
+    bool imageSelect = false;
+    //bool imageSelect = false;
 
-  @override
-  void initState()
-  {
-    super.initState();
-    loadModel();
-  }
 
-  Future loadModel() async {
-    Tflite.close();
-    String res;
-      res = (await Tflite.loadModel(
-        model: "assets/test/model2.tflite",
-        labels: "assets/test/labels.txt",
-        )
-      )!;
-    print("Models loading status: $res");
-  }
+    @override
+    void initState()
+    {
+      super.initState();
+      loadModel();
+    }
 
-  File? image;
-  Future imageClassification(image) async { 
+    Future loadModel() async {
+      Tflite.close();
+      String res;
+        res = (await Tflite.loadModel(
+          model: "assets/test/model_unquant.tflite",
+          labels: "assets/test/labels.txt",
+          )
+        )!;
+      print("Models loading status: $res");
+    }
+
+    Future imageClassification(File image) async {
     final List? recognitions = await Tflite.runModelOnImage(
       path: image.path,
       numResults: 10,
@@ -65,33 +68,34 @@ class _GalleryState extends State<Gallery> {
     });
   }
 
-////////////////////////// Upload Image ///////////////////////////
-  Future uplpadFile() async {
-    if (_image == null) return;
-
-    final fileName = path.basename(_image.path);
-    final destination = 'imageCollect/$fileName';
-
-    task = FirebaseApi.uploadFile(destination, _image);
-    setState(() {});
-
-    if (task == null) return;
-
-    final snapshot = await task!.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
-
-    print('Download-Link: $urlDownload');
+/////////////////////////// Camera //////////////////////////////////
+  Future _getCamera() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image != null) {
+        final imageTmp = File(image.path);
+        setState(() {
+          this._image = imageTmp;
+          imageSelect = true;
+        });
+        imageClassification(imageTmp);
+      }
+    } catch (e) {
+      print('err image => $e');
+    }
   }
-///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar( 
-        title: const Text("ผลลัพธ์"),
+        centerTitle: true,
+        title: const Text("กล้อง"),
         backgroundColor: Colors.cyan[900],
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+        leading: IconButton( //// กลับไปหน้าแรก ///
+          icon: const Icon(Icons.home),
           onPressed: () {
             Navigator.push(
               context, 
@@ -101,10 +105,10 @@ class _GalleryState extends State<Gallery> {
       ),
       
       body: ListView(
-        children: [ (imageSelect) 
-        ? Container (     /// แสดงรูปภาพ   ///////////
-            margin: const EdgeInsets.all(10),
-            child: Card(
+        children: [ _image != null  //////////////// แสดงรูปภาพ   ///////////
+        ? Container ( 
+            margin: const EdgeInsets.all(20),
+            child: Card( 
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(20),
@@ -112,7 +116,7 @@ class _GalleryState extends State<Gallery> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+                children: [ 
                    ClipRRect(
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20), topRight: Radius.circular(20),
@@ -120,68 +124,53 @@ class _GalleryState extends State<Gallery> {
                     ),
                     child: Container(
                       color: Colors.grey[300],
-                      child: Image.file (_image, fit:BoxFit.fill,),
+                      child: Image.file (_image!, fit:BoxFit.fill,),
                     ),
                   ),
-                  upload(), ///// Button UpImage /////
+                  //upload(), ///// Button UpImage /////
                 ],
               ),
             ),
         )
-
         : Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
           margin: const EdgeInsets.all(10),
             child: const Center(
               child: Opacity(
                 opacity: 0.8,
                 child: Center(
-                  child: Text("กรุณาเลือกรูปภาพ"),
+                  child: Text("กรุณาถ่ายภาพ"),
                 ),
               ),
             ),
-        ),  
-          
-          SingleChildScrollView(  /// แสดงชื่อ ////
+        ),
+           
+          SingleChildScrollView( /// แสดงชื่อ ////
             child: Column(
-              children: (imageSelect)?_results.map((result) {
-                return Center(
-                  child: Card(
-                    elevation: 8,
-                    shadowColor: Colors.teal,
+              children: _image != null ? _results.map((result) { 
+                return Card(
+                  elevation: 8,
+                  shadowColor: Colors.teal,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20), topRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)
+                        topLeft: Radius.circular(20), topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)
                       )
                     ),
-                    child: Container(
-                      width: 340,
-                      margin: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Text (
-                            "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
-                            style: const TextStyle (
-                              color: Colors.red,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  child: Container(
+                    width: 340,
+                    margin: const EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Text( "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
+                          style: const TextStyle (
+                            color: Colors.red,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: 10,),
-                          
-                          ElevatedButton(
-                            onPressed: () {
-                              uplpadFile();
-                            },
-                            child: Text('อัปโหลดไฟล์'),
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
+                        ),
+                        const SizedBox(height: 10,),
 
-                          TextButton(  //// ปุ่มแสดง Dec /////
+                         TextButton(  //// ปุ่มแสดง Dec /////
                             style: TextButton.styleFrom(
                               primary: Colors.cyan[700],
                             ),
@@ -243,15 +232,13 @@ class _GalleryState extends State<Gallery> {
                             },
                             child: const Text('รายละเอียด', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
                           ),
-                        ],
-                      ),
-                     
+                      ],
                     ),
                   ),
                 );
               }).toList():[],
             ),
-          ), 
+          )
         ],
       ),
 
@@ -260,21 +247,19 @@ class _GalleryState extends State<Gallery> {
         child: FittedBox(
           child: FloatingActionButton(
             backgroundColor: const Color(0xFFE57373),
-            onPressed: pickImage,
-            tooltip: "Pick Image",
-            child: const Icon(Icons.image, color: Colors.white,),
+            onPressed: _getCamera,
+            tooltip: "Pick Image Camera",
+            child: const Icon(Icons.camera, color: Colors.white,),
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // ย้ายไอคอน ///
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // ย้ายไอคอน ///
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        color: Colors.cyan[900],
+        child: Container(height: 60),
+      ),
     );
-  }
-
-  Future pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    File image = File(pickedFile!.path);
-    imageClassification(image);
   }
 
   TextButton add() => TextButton(   //// ดูรายเอียด ///
@@ -285,16 +270,15 @@ class _GalleryState extends State<Gallery> {
     }, 
     child: const Text('รายละเอียด'),
   );
-  
 
-  Container upload() {
+ /* Container upload() {   //////  upload Image ////
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: ElevatedButton(
         onPressed: () {
           uplpadFile();
         },
-        child: Text('อัปโหลดไฟล์'),
+        child: const Text('อัปโหลดไฟล์'),
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -302,7 +286,5 @@ class _GalleryState extends State<Gallery> {
         ),
       ),
     );
-  }
-
-   
+  }*/
 }

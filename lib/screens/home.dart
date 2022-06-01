@@ -1,13 +1,11 @@
-import 'package:cactus_project/camera_detection/capture.dart';
-import 'package:cactus_project/camera_detection/home_camera.dart';
 import 'package:cactus_project/comment/comment.dart';
-import 'package:cactus_project/main.dart';
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/screens/tips.dart';
-import 'package:cactus_project/test_tflite/test_camera.dart';
-import 'package:cactus_project/test_tflite/test_gallery.dart';
+import 'package:cactus_project/tflite/camera.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+
+import '../tflite/gallery.dart';
 
 class MenuHome extends StatefulWidget {
 
@@ -214,7 +212,7 @@ class _MenuHomeState extends State<MenuHome> {
                               Navigator.push(
                                 context, 
                                 MaterialPageRoute(
-                                  builder: (context) =>Gallery2(),
+                                  builder: (context) =>Gallery(),
                                 ),
                               );
                             },
