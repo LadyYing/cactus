@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:cactus_project/plants/gym_baldianum.dart';
 import 'package:cactus_project/plants/gym_bruchii.dart';
@@ -10,6 +11,7 @@ import 'package:cactus_project/plants/mam_humboldtii.dart';
 import 'package:cactus_project/plants/mam_perbella.dart';
 import 'package:cactus_project/plants/mam_plumose.dart';
 import 'package:cactus_project/tflite/filebase_api.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 import 'package:path/path.dart' as path;
 import '../screens/home.dart';
+import 'pop_up.dart';
 
 
 class Gallery extends StatefulWidget {
@@ -25,11 +28,15 @@ class Gallery extends StatefulWidget {
 }
 
 class _GalleryState extends State<Gallery> {
-  
+
+  final firebaseuser = FirebaseStorage.instance;
   UploadTask? task;
   File? _image;
   List _results =[];
   bool imageSelect = false;
+  double? confidenceX;
+  var indexX; //// เช็คค่ามากกว่า 0 ////
+  var testX;
 
   @override
   void initState()
@@ -60,8 +67,16 @@ class _GalleryState extends State<Gallery> {
     );
     setState(() {
       _results = recognitions!;
+      testX = _results[0]['confidence'].toString();
+      double d = double.parse(testX);
+      if(d <= 0.74){
+        testX = "ไม่สามารถจำแนกประเภทได้";
+      } else if (d >= 0.75) {
+        testX = d.toStringAsFixed(2);
+      }
       _image = image;
       imageSelect = true;
+      print('_resulte => $testX');
     });
   }
 
@@ -98,6 +113,11 @@ class _GalleryState extends State<Gallery> {
     final urlDownload = await snapshot.ref.getDownloadURL();
 
     print('Download-Link: $urlDownload');
+    await FirebaseFirestore.instance
+        .collection("imgCollect")
+        .add({"Image": urlDownload}).then((value) {
+    });
+    normalDialog(context, 'อัปโหลดไฟล์เสร็จสิ้น');
   }
   ///////////////////////////////////////////////////////////////////
 
@@ -119,7 +139,7 @@ class _GalleryState extends State<Gallery> {
       
       body: ListView(
         children: [ _image != null
-        ? Container (    /// แสดงรูปภาพ   ///////////
+        ? Container (   ///////// แสดงรูปภาพ   ///////////
             margin: const EdgeInsets.all(20),
             child: Card( 
               shape: const RoundedRectangleBorder(
@@ -145,7 +165,7 @@ class _GalleryState extends State<Gallery> {
               ),
             ),
         )
-        : Container(   //// ยังไม่ได้เลือกรูปภาพพ /////
+        : Container(   /////////// ยังไม่ได้เลือกรูปภาพพ ///////////
           margin: const EdgeInsets.all(10),
             child: const Center(
               child: Opacity(
@@ -155,13 +175,14 @@ class _GalleryState extends State<Gallery> {
                 ),
               ),
             ),
-        ),  
-          
+          ),  
+
           SingleChildScrollView(  /// แสดงชื่อ ////
             child: Column(
               children: (imageSelect)?_results.map((result) {
                 return Center(
                   child: Card (
+                    margin: const EdgeInsets.all(20),
                     elevation: 8,
                     shadowColor: Colors.teal,
                     shape: const RoundedRectangleBorder(
@@ -171,11 +192,11 @@ class _GalleryState extends State<Gallery> {
                       )
                     ),
                     child: Container(
-                      width: 340,
                       margin: const EdgeInsets.all(10),
+                      width: 340,
                       child: Column(
-                        children: [
-                          Text ( "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
+                        children : [ 
+                          Text ( "${result['label']} $testX",
                             style: const TextStyle (
                               color: Colors.red,
                               fontSize: 15,
@@ -201,7 +222,6 @@ class _GalleryState extends State<Gallery> {
                                 context,
                                   MaterialPageRoute(builder: (context) => MamCarmenae()),
                                 );
-                              
                               } else if ("${result['label']}" == '2 Plumose'){
                                 Navigator.push(
                                 context,
@@ -248,7 +268,6 @@ class _GalleryState extends State<Gallery> {
                           ),
                         ],
                       ),
-                     
                     ),
                   ),
                 );
@@ -277,15 +296,6 @@ class _GalleryState extends State<Gallery> {
       ),
     );
   }
-
-  /*Future pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    File image = File(pickedFile!.path);
-    imageClassification(image);
-  }*/
-
-
 
   TextButton add() => TextButton(   //// ดูรายเอียด ///
     onPressed: () {

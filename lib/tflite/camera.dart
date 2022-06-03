@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'filebase_api.dart';
+import 'package:path/path.dart' as path;
 import 'package:cactus_project/plants/gym_baldianum.dart';
 import 'package:cactus_project/plants/gym_bruchii.dart';
 import 'package:cactus_project/plants/gym_damsii.dart';
@@ -16,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
-import 'filebase_api.dart';
+import 'pop_up.dart';
 
 
 class Tflite2 extends StatefulWidget {
@@ -32,12 +36,9 @@ class _Tflite2State extends State<Tflite2> {
     File?  _image;
     List _results = [];
     bool imageSelect = false;
-    //bool imageSelect = false;
-
 
     @override
-    void initState()
-    {
+    void initState() {
       super.initState();
       loadModel();
     }
@@ -84,7 +85,31 @@ class _Tflite2State extends State<Tflite2> {
       print('err image => $e');
     }
   }
-////////////////////////////////////////////////////////////////////////
+
+////////////////////////// Upload Image ///////////////////////////
+  Future uplpadFile() async {
+    if (_image == null) return;
+
+    final fileName = path.basename(_image!.path);
+    final destination = 'imageCollect/$fileName';
+
+    task = FirebaseApi.uploadFile(destination, _image!);
+    setState(() {});
+
+    if (task == null) return;
+
+    final snapshot = await task!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    print('Download-Link: $urlDownload');
+    await FirebaseFirestore.instance
+        .collection("imgCollect")
+        //.doc()
+        .add({"Image": urlDownload}).then((value) {
+    });
+    normalDialog(context, 'อัปโหลดไฟล์เสร็จสิ้น');
+  }
+///////////////////////////////////////////////////////////////////
 
 
   @override
@@ -127,7 +152,7 @@ class _Tflite2State extends State<Tflite2> {
                       child: Image.file (_image!, fit:BoxFit.fill,),
                     ),
                   ),
-                  //upload(), ///// Button UpImage /////
+                  upload(), ///// Button UpImage /////
                 ],
               ),
             ),
@@ -148,6 +173,7 @@ class _Tflite2State extends State<Tflite2> {
             child: Column(
               children: _image != null ? _results.map((result) { 
                 return Card(
+                  margin: EdgeInsets.all(20),
                   elevation: 8,
                   shadowColor: Colors.teal,
                     shape: const RoundedRectangleBorder(
@@ -157,8 +183,8 @@ class _Tflite2State extends State<Tflite2> {
                       )
                     ),
                   child: Container(
-                    width: 340,
                     margin: const EdgeInsets.all(10),
+                    width: 340,
                     child: Column(
                       children: [
                         Text( "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
@@ -271,7 +297,7 @@ class _Tflite2State extends State<Tflite2> {
     child: const Text('รายละเอียด'),
   );
 
- /* Container upload() {   //////  upload Image ////
+  Container upload() {   //////  upload Image ////
     return Container(
       margin: const EdgeInsets.only(top: 10),
       child: ElevatedButton(
@@ -286,5 +312,5 @@ class _Tflite2State extends State<Tflite2> {
         ),
       ),
     );
-  }*/
+  }
 }
