@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'filebase_api.dart';
 import 'package:path/path.dart' as path;
 import 'package:cactus_project/plants/gym_baldianum.dart';
@@ -36,6 +35,8 @@ class _Tflite2State extends State<Tflite2> {
     File?  _image;
     List _results = [];
     bool imageSelect = false;
+    var indexX; //// เช็คค่ามากกว่า 0 ////
+    var testX;
 
     @override
     void initState() {
@@ -47,8 +48,8 @@ class _Tflite2State extends State<Tflite2> {
       Tflite.close();
       String res;
         res = (await Tflite.loadModel(
-          model: "assets/test/model_unquant.tflite",
-          labels: "assets/test/labels.txt",
+          model: "assets/model/cactus8.tflite",
+          labels: "assets/model/labels_cnn.txt",
           )
         )!;
       print("Models loading status: $res");
@@ -63,9 +64,17 @@ class _Tflite2State extends State<Tflite2> {
       imageStd: 127.5,
     );
     setState(() {
-      _results = recognitions!;
+       _results = recognitions!;
+      testX = _results[0]['confidence'].toString();
+      double d = double.parse(testX);
+      if(d <= 0.74){
+        testX = "ไม่สามารถจำแนกประเภทได้";
+      } else if (d >= 0.75) {
+        testX = d.toStringAsFixed(2);
+      }
       _image = image;
       imageSelect = true;
+      print('_resulte => $testX');
     });
   }
 
@@ -187,7 +196,7 @@ class _Tflite2State extends State<Tflite2> {
                     width: 340,
                     child: Column(
                       children: [
-                        Text( "${result['label']} - ${result['confidence'].toStringAsFixed(2)}",
+                        Text( "${result['label']} $testX",
                           style: const TextStyle (
                             color: Colors.red,
                             fontSize: 15,
@@ -203,56 +212,55 @@ class _Tflite2State extends State<Tflite2> {
                             onPressed: () {
                               print("${result['label']}");
 
-                              if ("${result['label']}" == '0 Perbella') {
-                                Navigator.push(
-                                context,
-                                  MaterialPageRoute(builder: (context) => MamPerbella()),
-                                );
-                              } else if ("${result['label']}" == '1 Carmenae') {
-                                Navigator.push(
-                                context,
-                                  MaterialPageRoute(builder: (context) => MamCarmenae()),
-                                );
-                              
-                              } else if ("${result['label']}" == '2 Plumose'){
+                              if ("${result['label']}" == 'Plumose') {
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => MamPlumose()),
                                 );
-                              } else if ("${result['label']}" == '3 Humboldtii'){
+                              } else if ("${result['label']}" == 'Perbella') {
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => MamPerbella()),
+                                );
+                              } else if ("${result['label']}" == 'Humboldtii'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => MamHumboldtii()),
                                 );
-                              } else if ("${result['label']}" == '4 Bocasana'){
+                              } else if ("${result['label']}" == 'Carmenae'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => MamCarmenae()),
+                                );
+                              } else if ("${result['label']}" == 'Bocasana'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => MamBocasana()),
                                 );
-                              } else if ("${result['label']}" == '5 Baldianum'){
+                              } else if ("${result['label']}" == 'Baldianum'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymBaldianum()),
                                 );
-                              } else if ("${result['label']}" == '6 Damsii'){
+                              } else if ("${result['label']}" == 'Ragonesei'){
+                                Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => GymRagonesei()),
+                                );
+                              } else if ("${result['label']}" == 'Damsii'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymDamsii()),
                                 );
-                              } else if ("${result['label']}" == '7 Bruchii'){
+                              } else if ("${result['label']}" == 'Bruchii'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymBruchii()),
                                 );
-                              } else if ("${result['label']}" == '8 Mihanovichii'){
+                              } else if ("${result['label']}" == 'Mihanovichii'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymMihanovichii()),
-                                );
-                              } else if ("${result['label']}" == '9 Ragonesei'){
-                                Navigator.push(
-                                context,
-                                  MaterialPageRoute(builder: (context) => GymRagonesei()),
                                 );
                               } 
                             },

@@ -1,6 +1,7 @@
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -245,7 +246,7 @@ class _MamCarmenaeState extends State<MamCarmenae> {
           child: FloatingActionButton(
             backgroundColor: const Color(0xFFE57373),
             onPressed: (){
-              
+              addCarmenae();
             },
             child: const Icon(Icons.add, color: Colors.white,),
           ),
@@ -258,5 +259,26 @@ class _MamCarmenaeState extends State<MamCarmenae> {
         child: Container(height: 60),
       ),
     );
+  }
+
+  String name = "Mammillaria carmenae";
+  String oname = "คาร์มิเน่";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FMCarmenae%2FMCarmenae.jpg?alt=media&token=5d8979a6-a3c6-4e36-931a-4e55cc6eab8a";
+  
+  Future<void> addCarmenae() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "oname": oname,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
   }
 }

@@ -1,7 +1,7 @@
-import 'package:cactus_project/add_myplants/cart_model.dart';
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -248,7 +248,9 @@ class _nameState extends State<MamPlumose> {
         child: FittedBox(
           child: FloatingActionButton(
             backgroundColor: const Color(0xFFE57373),
-            onPressed: (){},
+            onPressed: (){
+              addPlumose();
+            },
             child: const Icon(Icons.add, color: Colors.white,),
           ),
         ),
@@ -262,4 +264,30 @@ class _nameState extends State<MamPlumose> {
       
     );
   }
+
+  String name = "Mammillaria plumosa F.A.C.Weber";
+  String otherName = "แมมขนนก ";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FMPlumose%2F271743546_292957702888785_8396561920546073419_n.jpg?alt=media&token=4c3ee293-2397-4f27-9706-917face338b0";
+  
+  Future<void> addPlumose() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "otherName": otherName,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
+  }
 }
+
+
+
+
+

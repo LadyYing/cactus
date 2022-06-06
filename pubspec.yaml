@@ -52,8 +52,6 @@ dependencies:
   #permission_handler: ^9.0.2
 
   
-  
-  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,11 +78,10 @@ flutter:
     - assets/images/Slide5.PNG
     - assets/images/Slide6.PNG
   # Model
-    - assets/model/detect.tflite
-    - assets/model/detect.txt
-    - assets/test/model_unquant.tflite
     - assets/test/model2.tflite
     - assets/test/labels.txt
+    - assets/model/cactus8.tflite
+    - assets/model/labels_cnn.txt
   # DataCactus
     - assets/images/chart.png
     - assets/images/files.png

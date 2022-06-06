@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:cactus_project/plants/gym_baldianum.dart';
 import 'package:cactus_project/plants/gym_bruchii.dart';
@@ -20,6 +19,7 @@ import 'package:tflite/tflite.dart';
 import 'package:path/path.dart' as path;
 import '../screens/home.dart';
 import 'pop_up.dart';
+import 'pop_upload.dart';
 
 
 class Gallery extends StatefulWidget {
@@ -49,8 +49,8 @@ class _GalleryState extends State<Gallery> {
     Tflite.close();
     String res;
       res = (await Tflite.loadModel(
-        model: "assets/test/model2.tflite",
-        labels: "assets/test/labels.txt",
+        model: "assets/model/cactus8.tflite",
+        labels: "assets/model/labels_cnn.txt",
         )
       )!;
     print("Models loading status: $res");
@@ -70,7 +70,8 @@ class _GalleryState extends State<Gallery> {
       testX = _results[0]['confidence'].toString();
       double d = double.parse(testX);
       if(d <= 0.74){
-        testX = "ไม่สามารถจำแนกประเภทได้";
+        ImageNot(context, 'ไม่สามารถจำแนกประเภทได้');
+        //testX = "ไม่สามารถจำแนกประเภทได้";
       } else if (d >= 0.75) {
         testX = d.toStringAsFixed(2);
       }
@@ -119,8 +120,31 @@ class _GalleryState extends State<Gallery> {
     });
     normalDialog(context, 'อัปโหลดไฟล์เสร็จสิ้น');
   }
-  ///////////////////////////////////////////////////////////////////
 
+
+////////////////////////// Upload Image  Not ///////////////////////////
+  Future uploadImageNot() async {
+    if (_image == null) return;
+
+    final fileName = path.basename(_image!.path);
+    final destination = 'imageNotCollect/$fileName';
+
+    task = FirebaseApi.uploadFile(destination, _image!);
+    setState(() {});
+
+    if (task == null) return;
+
+    final snapshot = await task!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    print('Download-Link: $urlDownload');
+    await FirebaseFirestore.instance
+        .collection("imgNotCollect")
+        .add({"Image": urlDownload}).then((value) {
+    });
+    normalBack(context, 'อัปโหลดไฟล์เสร็จสิ้น');
+  }
+  ///////////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,52 +236,52 @@ class _GalleryState extends State<Gallery> {
                             onPressed: () {
                               print("${result['label']}");
 
-                              if ("${result['label']}" == '0 Perbella') {
+                              if ("${result['label']}" == 'Perbella') {
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => MamPerbella()),
                                 );
-                              } else if ("${result['label']}" == '1 Carmenae') {
+                              } else if ("${result['label']}" == 'Carmenae') {
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => MamCarmenae()),
                                 );
-                              } else if ("${result['label']}" == '2 Plumose'){
+                              } else if ("${result['label']}" == 'Plumose'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => MamPlumose()),
                                 );
-                              } else if ("${result['label']}" == '3 Humboldtii'){
+                              } else if ("${result['label']}" == 'Humboldtii'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => MamHumboldtii()),
                                 );
-                              } else if ("${result['label']}" == '4 Bocasana'){
+                              } else if ("${result['label']}" == 'Bocasana'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => MamBocasana()),
                                 );
-                              } else if ("${result['label']}" == '5 Baldianum'){
+                              } else if ("${result['label']}" == 'Baldianum'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymBaldianum()),
                                 );
-                              } else if ("${result['label']}" == '6 Damsii'){
+                              } else if ("${result['label']}" == 'Damsii'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymDamsii()),
                                 );
-                              } else if ("${result['label']}" == '7 Bruchii'){
+                              } else if ("${result['label']}" == 'Bruchii'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymBruchii()),
                                 );
-                              } else if ("${result['label']}" == '8 Mihanovichii'){
+                              } else if ("${result['label']}" == 'Mihanovichii'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymMihanovichii()),
                                 );
-                              } else if ("${result['label']}" == '9 Ragonesei'){
+                              } else if ("${result['label']}" == 'Ragonesei'){
                                 Navigator.push(
                                 context,
                                   MaterialPageRoute(builder: (context) => GymRagonesei()),
@@ -323,5 +347,24 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
+Future<Null> ImageNot(BuildContext context, String string) async {
+  showDialog(
+    context: context,
+    builder: (context) => SimpleDialog(
+      title: ListTile(
+        //leading: Image.asset('images/logo.png'),
+        title: Text(string),
+      ),
+      children: [
+        TextButton(
+          onPressed: () {
+            uploadImageNot();
+          },
+          child: Text('อัปโหลดไฟล์'),
+        )
+      ],
+    ),
+  );
+}
    
 }

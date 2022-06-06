@@ -32,7 +32,6 @@ class _MamPerbellaState extends State<MamPerbella> {
           },
         ),
       ),
-      
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("MamPerbella").snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
