@@ -44,20 +44,6 @@ class _MenuHomeState extends State<MenuHome> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.teal[500],
-                      shape: BoxShape.circle,
-                    ),
-                   /* child: IconButton(
-                      icon: Icon(Icons.search_rounded),
-                      onPressed:(){
-                        showSearch(
-                          context: context, 
-                          delegate: CustomSearchDelegate(),);
-                      }, 
-                    ),*/
-                  ),
                   Align(
                     alignment: Alignment.topRight,
                     child: Container(
@@ -85,8 +71,7 @@ class _MenuHomeState extends State<MenuHome> {
                       .headline5!
                       .copyWith(fontWeight: FontWeight.w900),
                   ),
-                  const SizedBox( height: 20,),
-                  
+                  const SizedBox( height: 15,),
                   Container( ////////////////////  ช่องค้นหา  /////
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5,),
                     decoration: BoxDecoration(
@@ -179,7 +164,7 @@ class _MenuHomeState extends State<MenuHome> {
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 2,
-                      childAspectRatio: .85,
+                      childAspectRatio: 1.0,
                       crossAxisSpacing: 18,
                       mainAxisSpacing: 18,
                       children: <Widget>[
@@ -202,7 +187,7 @@ class _MenuHomeState extends State<MenuHome> {
                               child: Column(
                                 children: <Widget>[
                                   const Spacer(),
-                                  Image.asset('assets/images/plant.png', width: 100, height: 100, fit:BoxFit.fill),
+                                  Image.asset('assets/images/plant.png', width: 70, height: 70, fit:BoxFit.fill),
                                   const Spacer(),
                                   Text(
                                     'สวนของฉัน',
@@ -237,7 +222,7 @@ class _MenuHomeState extends State<MenuHome> {
                               child: Column(
                                 children: <Widget>[
                                   const Spacer(),
-                                  Image.asset('assets/images/camera.png', width: 100, height: 100, fit:BoxFit.fill),
+                                  Image.asset('assets/images/camera.png', width: 70, height: 70, fit:BoxFit.fill),
                                   const Spacer(),
                                   Text(
                                     'กล้อง',
@@ -271,7 +256,7 @@ class _MenuHomeState extends State<MenuHome> {
                               child: Column(
                                 children: <Widget>[
                                   const Spacer(),
-                                  Image.asset('assets/images/book.png', width: 100, height: 100, fit:BoxFit.fill),
+                                  Image.asset('assets/images/book.png', width: 70, height: 70, fit:BoxFit.fill),
                                   const Spacer(),
                                   Text(
                                     'คู่มือแนะนำ',
@@ -305,7 +290,7 @@ class _MenuHomeState extends State<MenuHome> {
                               child: Column(
                                 children: <Widget>[
                                   const Spacer(),
-                                  Image.asset('assets/images/picture_icon.png', width: 100, height: 100, fit:BoxFit.fill),
+                                  Image.asset('assets/images/picture_icon.png', width: 70, height: 70, fit:BoxFit.fill),
                                   const Spacer(),
                                   Text(
                                     'รูปภาพ',
