@@ -1,6 +1,7 @@
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -258,4 +259,27 @@ class _GymDamsiiState extends State<GymDamsii> {
       ),
     );
   }
+
+  /////////////////// Add My Plants ///////////////////////////
+  String name = "Gymnocalycium damsii f. variegata";
+  String oname = "ยิมโนแม่ลูกดก, ยิมโนลูกชุบ";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FGDamsii%2FDamsii11.jpg?alt=media&token=0a413cbb-f3b3-48d5-961e-2fb75428455e";
+  
+  Future<void> addCarmenae() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "oname": oname,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
+  }
+  
 }

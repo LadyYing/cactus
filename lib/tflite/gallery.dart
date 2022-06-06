@@ -70,7 +70,7 @@ class _GalleryState extends State<Gallery> {
       testX = _results[0]['confidence'].toString();
       double d = double.parse(testX);
       if(d <= 0.74){
-        ImageNot(context, 'ไม่สามารถจำแนกประเภทได้');
+        imageNot(context, 'ไม่สามารถจำแนกประเภทได้');
         //testX = "ไม่สามารถจำแนกประเภทได้";
       } else if (d >= 0.75) {
         testX = d.toStringAsFixed(2);
@@ -144,7 +144,8 @@ class _GalleryState extends State<Gallery> {
     });
     normalBack(context, 'อัปโหลดไฟล์เสร็จสิ้น');
   }
-  ///////////////////////////////////////////////////////////////////
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -347,24 +348,24 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
-Future<Null> ImageNot(BuildContext context, String string) async {
-  showDialog(
-    context: context,
-    builder: (context) => SimpleDialog(
-      title: ListTile(
-        //leading: Image.asset('images/logo.png'),
-        title: Text(string),
+  Future<Null> imageNot(BuildContext context, String string) async {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: ListTile(
+          //leading: Image.asset('images/logo.png'),
+          title: Text(string),
+        ),
+        children: [
+          TextButton(
+            onPressed: () {
+              uploadImageNot();
+            },
+            child: const Text('อัปโหลดไฟล์'),
+          )
+        ],
       ),
-      children: [
-        TextButton(
-          onPressed: () {
-            uploadImageNot();
-          },
-          child: Text('อัปโหลดไฟล์'),
-        )
-      ],
-    ),
-  );
-}
+    );
+  }
    
 }

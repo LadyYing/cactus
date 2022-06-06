@@ -20,6 +20,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
 import 'pop_up.dart';
+import 'pop_upload.dart';
 
 
 class Tflite2 extends StatefulWidget {
@@ -55,6 +56,7 @@ class _Tflite2State extends State<Tflite2> {
       print("Models loading status: $res");
     }
 
+  ///////////////////////  Tflite ///////////////////////////////////
     Future imageClassification(File image) async {
     final List? recognitions = await Tflite.runModelOnImage(
       path: image.path,
@@ -68,7 +70,7 @@ class _Tflite2State extends State<Tflite2> {
       testX = _results[0]['confidence'].toString();
       double d = double.parse(testX);
       if(d <= 0.74){
-        testX = "ไม่สามารถจำแนกประเภทได้";
+        imageNot(context, 'ไม่สามารถจำแนกประเภทได้');
       } else if (d >= 0.75) {
         testX = d.toStringAsFixed(2);
       }
@@ -118,8 +120,50 @@ class _Tflite2State extends State<Tflite2> {
     });
     normalDialog(context, 'อัปโหลดไฟล์เสร็จสิ้น');
   }
-///////////////////////////////////////////////////////////////////
 
+////////////////////////// Upload Image Not ///////////////////////////
+  Future uploadImageNot() async {
+    if (_image == null) return;
+
+    final fileName = path.basename(_image!.path);
+    final destination = 'imageNotCollect/$fileName';
+
+    task = FirebaseApi.uploadFile(destination, _image!);
+    setState(() {});
+
+    if (task == null) return;
+
+    final snapshot = await task!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    print('Download-Link: $urlDownload');
+    await FirebaseFirestore.instance
+        .collection("imgNotCollect")
+        .add({"Image": urlDownload}).then((value) {
+    });
+    normalBack(context, 'อัปโหลดไฟล์เสร็จสิ้น');
+  }
+
+  ///////////////////////////////////////////////////////////////
+  Future<Null> imageNot(BuildContext context, String string) async {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: ListTile(
+          //leading: Image.asset('images/logo.png'),
+          title: Text(string),
+        ),
+        children: [
+          TextButton(
+            onPressed: () {
+              uploadImageNot();
+            },
+            child: const Text('อัปโหลดไฟล์'),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

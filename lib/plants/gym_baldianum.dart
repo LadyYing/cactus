@@ -1,6 +1,7 @@
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -258,5 +259,27 @@ class _GymBaldianumState extends State<GymBaldianum> {
         child: Container(height: 60),
       ),
     );
+  }
+
+  /////////////////// Add My Plants ///////////////////////////
+  String name = "Gymnocalycium Baldianum";
+  String oname = "บาเนียดัม";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FGBaldianum%2FBaldianum.jpg?alt=media&token=3ab49181-0f0b-429f-92b9-af1d65680790";
+  
+  Future<void> addCarmenae() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "oname": oname,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
   }
 }

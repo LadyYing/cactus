@@ -1,6 +1,7 @@
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -261,4 +262,27 @@ class _GymRagoneseiState extends State<GymRagonesei> {
       ),
     );
   }
+
+  /////////////////// Add My Plants ///////////////////////////
+  String name = "Gymnocalycium Ragonesei";
+  String oname = "ยิมโนจานบิน";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FGRagonesei%2FRagonesei1.jpg?alt=media&token=8e03272c-6719-4854-b2d6-57e0a33a2d6d";
+  
+  Future<void> addCarmenae() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "oname": oname,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
+  }
+  
 }

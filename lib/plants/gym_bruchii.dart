@@ -1,6 +1,7 @@
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -256,5 +257,27 @@ class _GymBruchiiState extends State<GymBruchii> {
         child: Container(height: 60),
       ),
     );
+  }
+
+  /////////////////// Add My Plants ///////////////////////////
+  String name = "Gymnocalycium Bruchii";
+  String oname = "บลูชิ";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FGBruchii%2FBruchii.jpg?alt=media&token=98ed4c05-ea27-4f66-b593-db3cb0ddba17";
+  
+  Future<void> addCarmenae() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "oname": oname,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
   }
 }

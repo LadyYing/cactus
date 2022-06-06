@@ -1,6 +1,5 @@
-import 'package:cactus_project/add_myplants/my_plants.dart';
-import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ class _MamHumboldtiiState extends State<MamHumboldtii> {
     "image", "image1", "image2", "image3","image4", 
     "image5","image6", "image7", "image8", "image9",
   ];
+  
   ////// เตรีสยม firebase ////////
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   
@@ -258,5 +258,26 @@ class _MamHumboldtiiState extends State<MamHumboldtii> {
         child: Container(height: 60),
       ),
     );
+  }
+
+  String name = "Mammillaria Humboldtii  v. caespitosa.";
+  String otherName = "แมมลูกกอล์ฟ ";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FMHumboldtii%2FMHumboldtii.jpg?alt=media&token=88c3d4cf-b794-4846-8a98-0db7f978ce42";
+  
+  Future<void> addPlumose() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "otherName": otherName,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
   }
 }

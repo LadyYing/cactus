@@ -1,8 +1,6 @@
 import 'package:cactus_project/screens/home.dart';
 import 'package:flutter/material.dart';
 
-
-
 Future<Null> normalBack(BuildContext context, String string) async {
   showDialog(
     context: context,

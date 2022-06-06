@@ -1,5 +1,6 @@
 import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -255,5 +256,26 @@ class _MamPerbellaState extends State<MamPerbella> {
         child: Container(height: 60),
       ),
     );
+  }
+
+  String name = "Mammillaria Perbella";
+  String otherName = "Owl Eye Cactus, แมมนกฮูก";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FMPerbella%2FPerbella1.jpg?alt=media&token=efdd6655-a177-4389-9115-a950651b7b8a";
+  
+  Future<void> addPlumose() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "otherName": otherName,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
   }
 }

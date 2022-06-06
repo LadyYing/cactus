@@ -1,6 +1,7 @@
 import 'package:cactus_project/add_myplants/my_plants.dart';
 import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
+import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -260,5 +261,28 @@ class _MamBocasanaState extends State<MamBocasana> {
       ),
     );
   }
+  
+  /////////////////// Add My Plants ///////////////////////////
+  String name = "Mammillaria bocasana Poselg. ";
+  String oname = "Powder Puff Cactus, Powder Puff Pincushion, แมมขนแมว";
+  String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FMBocasana%2FMBocasana.jpg?alt=media&token=d87bbb8e-efa9-4d6e-b6ef-8ed927907a77";
+  
+  Future<void> addCarmenae() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().then((value) async {
+      print('----------Firebase---------');
+      await FirebaseFirestore.instance
+          .collection("Myplants")
+          .add({
+              "name": name,
+              "oname": oname,
+              "picture": picture,
+      }).then((_) {
+        print("success!");
+        normalDialog(context, 'เสร็จสิ้น');
+      });
+    });
+  }
+
 }
 
