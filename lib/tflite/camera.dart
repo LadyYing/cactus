@@ -49,7 +49,7 @@ class _Tflite2State extends State<Tflite2> {
       Tflite.close();
       String res;
         res = (await Tflite.loadModel(
-          model: "assets/model/cactus12.tflite",
+          model: "assets/model/cactus13.tflite",
           labels: "assets/model/labels_cnn.txt",
           )
         )!;
@@ -69,9 +69,9 @@ class _Tflite2State extends State<Tflite2> {
        _results = recognitions!;
       testX = _results[0]['confidence'].toString();
       double d = double.parse(testX);
-      if(d <= 0.70){
+      if(d <= 0.69){
         imageNot(context, 'ไม่สามารถจำแนกประเภทได้');
-      } else if (d >= 0.71) {
+      } else if (d >= 0.70) {
         testX = d.toStringAsFixed(2);
       }
       _image = image;
