@@ -49,7 +49,7 @@ class _GalleryState extends State<Gallery> {
     Tflite.close();
     String res;
       res = (await Tflite.loadModel(
-        model: "assets/model/cactus8.tflite",
+        model: "assets/model/cactus12.tflite",
         labels: "assets/model/labels_cnn.txt",
         )
       )!;

@@ -80,7 +80,8 @@ flutter:
   # Model
     - assets/test/model2.tflite
     - assets/test/labels.txt
-    - assets/model/cactus8.tflite
+    #- assets/model/cactus8.tflite
+    - assets/model/cactus12.tflite
     - assets/model/labels_cnn.txt
   # DataCactus
     - assets/images/chart.png

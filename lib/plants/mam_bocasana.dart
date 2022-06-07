@@ -1,5 +1,3 @@
-import 'package:cactus_project/add_myplants/my_plants.dart';
-import 'package:cactus_project/tflite/gallery.dart';
 import 'package:cactus_project/screens/home.dart';
 import 'package:cactus_project/tflite/pop_up.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -247,7 +245,7 @@ class _MamBocasanaState extends State<MamBocasana> {
           child: FloatingActionButton(
             backgroundColor: const Color(0xFFE57373),
             onPressed: (){
-              
+              addbocasana();
             },
             child: const Icon(Icons.add, color: Colors.white,),
           ),
@@ -267,7 +265,7 @@ class _MamBocasanaState extends State<MamBocasana> {
   String oname = "Powder Puff Cactus, Powder Puff Pincushion, แมมขนแมว";
   String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FMBocasana%2FMBocasana.jpg?alt=media&token=d87bbb8e-efa9-4d6e-b6ef-8ed927907a77";
   
-  Future<void> addCarmenae() async {
+  Future<void> addbocasana() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp().then((value) async {
       print('----------Firebase---------');

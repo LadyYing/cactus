@@ -246,7 +246,7 @@ class _GymMihanovichiiState extends State<GymMihanovichii> {
           child: FloatingActionButton(
             backgroundColor: const Color(0xFFE57373),
             onPressed: (){
-              
+              addMihanovichii();
             },
             child: const Icon(Icons.add, color: Colors.white,),
           ),
@@ -266,7 +266,7 @@ class _GymMihanovichiiState extends State<GymMihanovichii> {
   String oname = "Chin cactus";
   String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FGMihanovichii%2FMihanovichii.jpg?alt=media&token=57aef58f-ca8f-4713-aa97-c8fc1b2eb448";
   
-  Future<void> addCarmenae() async {
+  Future<void> addMihanovichii() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp().then((value) async {
       print('----------Firebase---------');

@@ -243,7 +243,7 @@ class _MamPerbellaState extends State<MamPerbella> {
           child: FloatingActionButton(
             backgroundColor: const Color(0xFFE57373),
             onPressed: (){
-              
+              addPerbella();
             },
             child: const Icon(Icons.add, color: Colors.white,),
           ),
@@ -262,7 +262,7 @@ class _MamPerbellaState extends State<MamPerbella> {
   String otherName = "Owl Eye Cactus, แมมนกฮูก";
   String picture = "https://firebasestorage.googleapis.com/v0/b/cuctus2022.appspot.com/o/Cactus%2FMPerbella%2FPerbella1.jpg?alt=media&token=efdd6655-a177-4389-9115-a950651b7b8a";
   
-  Future<void> addPlumose() async {
+  Future<void> addPerbella() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp().then((value) async {
       print('----------Firebase---------');
