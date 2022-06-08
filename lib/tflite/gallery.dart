@@ -74,6 +74,8 @@ class _GalleryState extends State<Gallery> {
         //testX = "ไม่สามารถจำแนกประเภทได้";
       } else if (d >= 0.70) {
         testX = d.toStringAsFixed(2);
+      } else {
+        normalDialog(context, 'ไม่พบข้อมูล');
       }
       _image = image;
       imageSelect = true;

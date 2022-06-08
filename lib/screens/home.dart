@@ -130,7 +130,7 @@ class _MenuHomeState extends State<MenuHome> {
                                 context,
                                 MaterialPageRoute(builder: (context) => GymBruchii()),
                               );
-                            } else if ((search == "Baldianum") || (search == "baldianum") || (search == 'ยิมโนบาเนียนัม') || (search == 'บาเนียนัม')) {
+                            } else if ((search == "Baldianum") || (search == "baldianum") || (search == 'ยิมโนบาเนียดัม') || (search == 'บาเนียดัม')) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => GymBaldianum()),
